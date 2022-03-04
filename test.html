@@ -1,0 +1,31 @@
+<input type="file" name="patient_profileImg" id="patient_profileImg" onchange="preview()" />
+<img id="frame" src="img/default.jpg" width="120" style="display: block;" id="imgPreview">
+
+
+<script>
+  // var loadFile = function (event) {
+  //   var output = document.getElementById('imgPreview');
+  //   output.src = URL.createObjectURL(event.target.files[0]);
+  //   output.onload = function () {
+  //     URL.revokeObjectURL(output.src) // free memory
+  //   }
+  // };
+
+  function preview() {
+    frame.src = URL.createObjectURL(event.target.files[0]);
+  }
+
+
+  // Preview Image for addStudent and edit
+  // function previewImage() {
+  //   const picture = document.querySelector('.patient_profileImg');
+  //   const imgPreview = document.querySelector('.imgPreview');
+
+  //   const oFReader = new FileReader();
+  //   oFReader.readAsDataURL(picture.files[0]);
+
+  //   oFReader.onload = function (OFREvent) {
+  //     imgPreview.src = OFREvent.target.result;
+  //   };
+  // }
+</script>

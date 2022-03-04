@@ -41,8 +41,6 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
 
   <link rel="icon" type="image/x-icon" href="logo.png">
   <title>MYCOVIQ | COVID-19 INDIVIDUAL QUARANTINE</title>
@@ -62,7 +60,7 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
 
 
       <!-- Sidebar -->
-      <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background-color: grey;">
+      <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -78,7 +76,7 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
           <a class="nav-link" href="index.php?id=<?= $_SESSION['patient_id']; ?>">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <i class="fas fa-fw fa-home"></i>
             <span>Utama</span></a>
         </li>
 
@@ -93,36 +91,36 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
         <!-- Nav Item - Charts -->
         <li class="nav-item">
           <a class="nav-link" href="deklarasi_kesihatan_harian.php?id=<?= $_SESSION['patient_id']; ?>">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-fw fa-file-medical"></i>
             <span>Deklarasi Kendiri</span></a>
         </li>
 
         <!-- Nav Item - Charts -->
         <li class="nav-item">
           <a class="nav-link" href="patient_chat.php?id=<?= $_SESSION['patient_id']; ?>&enter=true">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-fw fa-comments"></i>
             <span>Chat kami</span></a>
         </li>
 
         <!-- Nav Item - Charts -->
         <li class="nav-item">
           <a class="nav-link" href="patient_profile.php?id=<?= $_SESSION['patient_id']; ?>">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-fw fa-user"></i>
             <span>Akaun Saya</span></a>
         </li>
 
         <!-- Nav Item - Charts -->
         <li class="nav-item">
           <a class="nav-link" href="patient_faq.php">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-fw fa-question-circle"></i>
             <span>FAQ</span></a>
         </li>
 
 
         <!-- Nav Item - Charts -->
         <li class="nav-item">
-          <a class="nav-link" href="logout.php">
-            <i class="fas fa-fw fa-chart-area"></i>
+          <a class="nav-link" href="logout.php?id=<?= $_SESSION['patient_id']; ?>">
+            <i class=" fas fa-fw fa-sign-out-alt fa-flip-horizontal"></i>
             <span>Log Keluar</span></a>
         </li>
 
@@ -437,15 +435,16 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Anda pasti untuk log keluar?</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
-          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-body">Pilih "Logout" jika anda memilih untuk tamatkan sesi.</div>
           <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
+            <a class="btn btn-danger" href="logout.php?id=<?= $_SESSION['patient_id']; ?>">Logout</a>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+            <!-- <a class="btn btn-primary" href="login.html">Logout</a> -->
           </div>
         </div>
       </div>

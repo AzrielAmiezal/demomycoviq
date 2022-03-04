@@ -178,7 +178,7 @@ function sendMail($patientEmail, $v_code)
     $mail->Subject = 'Email Verification for MyCOVIQ';
     $mail->Body    = "Thanks for registration!
     Click the link below to verify the email address
-    <a href='http://localhost/testmycoviq/email_verify.php?email=$patientEmail&code=$v_code'>Verify Now</a>";
+    <a href='http://localhost/demomycoviq/email_verify.php?email=$patientEmail&code=$v_code'>Verify Now</a>";
 
     $mail->send();
     return true;

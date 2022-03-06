@@ -76,7 +76,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-        <a class="nav-link" href="index.php?id=<?= $_SESSION['patient_id']; ?>">
+        <a class="nav-link" href="index.php">
           <i class="fas fa-fw fa-home"></i>
           <span>Utama</span></a>
       </li>
@@ -133,17 +133,21 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
             <i class="fa fa-bars"></i>
           </button>
 
+          <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <h4>DASHBOARD</h4>
+          </div>
+
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
             <!-- Nav Item - Alerts -->
-            <li class="nav-item dropdown no-arrow mx-1">
+            <!-- <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-bell fa-fw"></i>
-                <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter">3+</span>
-              </a>
-              <!-- Dropdown - Alerts -->
-              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                <i class="fas fa-bell fa-fw"></i> -->
+            <!-- Counter - Alerts -->
+            <!-- <span class="badge badge-danger badge-counter">3+</span> -->
+            <!-- </a> -->
+            <!-- Dropdown - Alerts -->
+            <!-- <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
                   Alerts Center
                 </h6>
@@ -182,7 +186,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
                 </a>
                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
               </div>
-            </li>
+            </li> -->
 
             <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -206,7 +210,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
                   Akaun Saya
                 </a>
                 <a class="dropdown-item" href="changePassword.php?id=<?= $_SESSION['patient_id']; ?>">
-                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                  <i class="fas fa-cog fa-sm fa-fw mr-2 text-gray-400"></i>
                   Tukar kata laluan
                 </a>
                 <a class="dropdown-item" href="">
@@ -235,7 +239,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
           <div class="container-fluid">
             <!-- Page Heading -->
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-              <h4 class="h3 mb-0 text-gray-800">Paparan Deklarasi Kesihatan Harian pada <?= date('d M Y h:i:s A'); ?></h4>
+              <h4 class="h5 mb-0 text-gray-800">Paparan Deklarasi Kesihatan Harian pada <?= date('d M Y h:i:s A'); ?></h4>
             </div>
 
             <!-- Content Row -->

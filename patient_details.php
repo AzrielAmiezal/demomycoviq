@@ -1,9 +1,6 @@
 <?php
 session_start();
 require 'functions.php';
-require 'PHPMailer/PHPMailer.php';
-require 'PHPMailer/Exception.php';
-require 'PHPMailer/SMTP.php';
 
 //get id from url
 $id = $_GET['id'];
@@ -18,7 +15,7 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
   $responseData = json_decode($verifyResponse);
 
   if ($responseData->success) {
-    if (editProfile($_POST) > 0) {
+    if (editDetails($_POST) > 0) {
       echo "<script>
                 alert('Profile akaun anda berjaya dikemaskini');
                 document.location.href = 'index.php';

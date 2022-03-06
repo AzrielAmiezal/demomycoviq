@@ -359,11 +359,16 @@ function uploadPicture()
   return $new_file_name;
 }
 
-function editProfileImg($data)
+function editProfile($data)
 {
   $conn = connection();
 
   $id = $data['patient_id'];
+
+  // $patientName = htmlspecialchars($data['patientName']);
+  // $patientICNo = htmlspecialchars($data['patient_icNo']);
+  $patientAddress = htmlspecialchars($data['patient_address']);
+  //$patientTelNo = htmlspecialchars($data['patient_telNo']);
   $old_patientProfileImg = htmlspecialchars($data['old_profileImg']);
 
   //upload pictures
@@ -377,8 +382,8 @@ function editProfileImg($data)
   }
 
   $query = "UPDATE patient SET
-                
-            patient_profileImg = '$patientImage'
+              patient_address = '$patientAddress',
+              patient_profileImg = '$patientImage'
             WHERE patient_id = $id";
 
   mysqli_query($conn, $query) or die(mysqli_error($conn));
@@ -386,7 +391,7 @@ function editProfileImg($data)
 }
 
 
-function editProfile($data)
+function editDetails($data)
 {
 
   $conn = connection();
@@ -397,14 +402,13 @@ function editProfile($data)
   $patientAddress = htmlspecialchars($data['patient_address']);
   $patientTelNo = htmlspecialchars($data['patient_telNo']);
   //$patientEmail = htmlspecialchars($data['patientEmail']);
-  $patientProfileImg = htmlspecialchars($data['patient_profileImg']);
+  //$patientProfileImg = htmlspecialchars($data['patient_profileImg']);
 
   $query = "UPDATE patient SET
                 patientName = '$patientName',    
                 patient_icNo = '$patientICNo',
                 patient_address = '$patientAddress',
-                patient_telNo = '$patientTelNo',
-                patient_profileImg = '$patientProfileImg'
+                patient_telNo = '$patientTelNo'
             WHERE patient_id = $id";
 
   mysqli_query($conn, $query) or die(mysqli_error($conn));
@@ -543,7 +547,7 @@ function sendMailIsolation($patientEmail, $patientName, $patient_icNo)
     $mail->Subject = 'MYCOVIQ: DEKLARASI HARIAN KENDIRI';
     $mail->Body    = 'Hi ' . $patientName . ',<br/><br/>
     Sila semak butiran deklarasi harian kendiri bagi <b>NO K/P ' . $patient_icNo . '</b> di MYCOVIQ <br/><br/>
-    <b>PASTIKAN ANDA KEMASKINI KESEMUA DEKLARASI HARIAN MENGIKUT HARI, TARIKH DAN SESI YANG DITETAPKAN SEHINGGA TAMAT TEMPOH KUARANTIN KENDIRI.</b><br/><br/>
+    <b>PASTIKAN ANDA KEMASKINI KESEMUA DEKLARASI HARIAN KENDIRI MENGIKUT HARI, TARIKH DAN SESI YANG DITETAPKAN SEHINGGA TAMAT TEMPOH KUARANTIN KENDIRI.</b><br/><br/>
     Terima Kasih.<br/><br/>
     <b>SALAM WASALAM.</b>';
 

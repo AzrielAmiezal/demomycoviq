@@ -117,56 +117,60 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
             <i class="fa fa-bars"></i>
           </button>
 
+          <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <h4>DEKLARASI KENDIRI</h4>
+          </div>
+
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
             <!-- Nav Item - Alerts -->
-            <li class="nav-item dropdown no-arrow mx-1">
+            <!-- <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-bell fa-fw"></i>
-                <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter">3+</span>
+                <i class="fas fa-bell fa-fw"></i> -->
+            <!-- Counter - Alerts -->
+            <!-- <span class="badge badge-danger badge-counter">3+</span> -->
+            <!-- </a> -->
+            <!-- Dropdown - Alerts -->
+            <!-- <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+              <h6 class="dropdown-header">
+                Alerts Center
+              </h6>
+              <a class="dropdown-item d-flex align-items-center" href="#">
+                <div class="mr-3">
+                  <div class="icon-circle bg-primary">
+                    <i class="fas fa-file-alt text-white"></i>
+                  </div>
+                </div>
+                <div>
+                  <div class="small text-gray-500">December 12, 2019</div>
+                  <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                </div>
               </a>
-              <!-- Dropdown - Alerts -->
-              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-                <h6 class="dropdown-header">
-                  Alerts Center
-                </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-primary">
-                      <i class="fas fa-file-alt text-white"></i>
-                    </div>
+              <a class="dropdown-item d-flex align-items-center" href="#">
+                <div class="mr-3">
+                  <div class="icon-circle bg-success">
+                    <i class="fas fa-donate text-white"></i>
                   </div>
-                  <div>
-                    <div class="small text-gray-500">December 12, 2019</div>
-                    <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                </div>
+                <div>
+                  <div class="small text-gray-500">December 7, 2019</div>
+                  $290.29 has been deposited into your account!
+                </div>
+              </a>
+              <a class="dropdown-item d-flex align-items-center" href="#">
+                <div class="mr-3">
+                  <div class="icon-circle bg-warning">
+                    <i class="fas fa-exclamation-triangle text-white"></i>
                   </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-success">
-                      <i class="fas fa-donate text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">December 7, 2019</div>
-                    $290.29 has been deposited into your account!
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-warning">
-                      <i class="fas fa-exclamation-triangle text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">December 2, 2019</div>
-                    Spending Alert: We've noticed unusually high spending for your account.
-                  </div>
-                </a>
-                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-              </div>
-            </li>
+                </div>
+                <div>
+                  <div class="small text-gray-500">December 2, 2019</div>
+                  Spending Alert: We've noticed unusually high spending for your account.
+                </div>
+              </a>
+              <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+            </div>
+            </li> -->
 
             <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -176,7 +180,7 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                 <?php
                 // To fetch picture from phpmyadmin
                 $conn = connection();
-                $id = $_GET['id'];
+                $id = $_SESSION['patient_id'];
                 $patient = mysqli_query($conn, "SELECT * FROM patient WHERE patient_id = '$id'");
                 $rows = mysqli_fetch_array($patient);
 
@@ -186,13 +190,21 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="patient_profile.php?id=<?= $_SESSION['patient_id']; ?>">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Akaun Saya
                 </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Tetapan
+                <a class="dropdown-item" href="changePassword.php?id=<?= $_SESSION['patient_id']; ?>">
+                  <i class="fas fa-cog fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Tukar kata laluan
+                </a>
+                <a class="dropdown-item" href="">
+                  <i class="fas fa-sm fa-fw fa-question-circle mr-2 text-gray-400"></i>
+                  FAQ
+                </a>
+                <a class="dropdown-item" href="">
+                  <i class="fas fa-info fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Privacy Policy
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -220,7 +232,7 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                 <div class="card shadow mb-4">
                   <!-- Card Header - Dropdown -->
                   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-center">
-                    <h6 class="m-0 font-weight-bold text-primary">DEKLARASI HARIAN KENDIRI</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">KEMASKINI KESIHATAN HARIAN</h6>
                   </div>
                   <!-- Card Body -->
                   <div class="card-body">
@@ -253,17 +265,17 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                           ?>
                             <?php
                             for ($i = $startDate; $i <= $endDate; $i->modify('+1 day')) :
-                              $date = new DateTime('2022-03-07');
+                              $date = new DateTime();
                               $time1 = $i->format('Y-m-d');
                               $time2 = $date->format('Y-m-d');
-                              // $hour = date('G');
-                              // $minute = date('i');
-                              $hour = 10;
-                              $minute = 00;
+                              $hour = date('G');
+                              $minute = date('i');
+                              // $hour = 19;
+                              // $minute = 00;
                             ?>
                               <tr>
                                 <td><?= $a++; ?></td>
-                                <td><?= $i->format("D, Y-m-d"); ?></td>
+                                <td><?= $i->format("D, d/m/Y"); ?></td>
                                 <td>
                                   <?php
                                   //echo $daySesi1; 4/03      28/20
@@ -274,6 +286,7 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
 
                                   if (($time1 == $time2) && ($hour >= 00 && $minute >= 00) && ($hour <= 12 && $minute <= 59)) {
                                     if (mysqli_num_rows($result1) < 1) {
+
                                       echo '<a href="borang_health_status.php?hari=' . $daySesi1 . '&sesi=1"><i class="fas fa-pen-square"></i></a>';
                                       //echo 'Sesi 2';
                                     } else {
@@ -358,14 +371,6 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                                       }
                                     }
                                   }
-                                  // else {
-                                  //   if (mysqli_num_rows($result2) < 1) {
-                                  //     echo '<i class="fas fa-times-circle" style="color:orange;"></i>';
-                                  //     //echo 'Sesi 1';
-                                  //   } else {
-                                  //     echo '<i class="fas fa-check-circle" style="color:green;"></i>';
-                                  //   }
-                                  // } 
                                   ?>
                                 </td>
                               </tr>
@@ -380,11 +385,11 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                         </tbody>
                         <!-- ***************ARAHAN************************************ -->
                         <h5 style="text-align: center;"><b>Sila pastikan anda menjawab kesemua deklarasi kesihatan kendiri pada hari dan sesi yang ditetapkan.</b></h5>
-                        <div style="text-align: center;">
+                        <div class="alert alert-warning" style="text-align: center;">
                           <?php if ($a > 0) : ?>
-                            <p>Sila kemaskini kesihatan harian anda dua kali sehari, sekali di sebelah pagi dan sekali di sebelah petang, masing-masing sebelum <b>1.00 PM</b> dan <b>12 tengah malam</b> </p>
-                            <p>Anda akan menjalani tempoh kuarantin selama <b><?= $a - 1; ?> hari</b> bermula pada <b><?= date('d M Y', strtotime($d['tarikh_mula'])); ?></b> dijangka tamat pada <b><?= date('d M Y', strtotime($d['tarikh_tamat'])); ?></b></p>
-                            <p>Tahap Jangkitan: <?= $d['covidStage']; ?> <br /> Status: <?= $d['status_kuarantin']; ?></p>
+                            <p style="color: red;">Sila kemaskini kesihatan harian anda dua kali sehari, sekali di sebelah pagi dan sekali di sebelah petang, masing-masing sebelum <b>1.00 PM</b> dan <b>12 tengah malam</b> </p>
+                            <p style="color: red;">Anda akan menjalani tempoh kuarantin selama <b><?= $a - 1; ?> hari</b> bermula pada <b><?= date('d M Y', strtotime($d['tarikh_mula'])); ?></b> dijangka tamat pada <b><?= date('d M Y', strtotime($d['tarikh_tamat'])); ?></b></p>
+                            <p style="color: red;">Tahap Jangkitan: <?= $d['covidStage']; ?> <br /> Status: <?= $d['status_kuarantin']; ?></p>
                             <p><i class="fas fa-pen-square" style="color:blue;"></i> : Pautan Dibuka | <i class="fas fa-times-circle" style="color:red;"></i> : Tidak dikemaskini | <i class="fas fa-times-circle" style="color:orange;"></i> : Pautan belum dibuka | <i class="fas fa-check-circle" style="color:green;"></i> : Berjaya dikemaskini</p>
                           <?php endif; ?>
                         </div>
@@ -392,7 +397,7 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
 
                       <?php
                       if ($a > 0) {
-                        if ($time2 > $d['tarikh_tamat']) {
+                        if ($time2 > $d['tarikh_tamat'] && $d['status_kuarantin'] == 'Tamat Kuarantin') {
 
                           echo '<button>Print PDF</button>';
                         }

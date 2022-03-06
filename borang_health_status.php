@@ -44,14 +44,20 @@ $date = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$id'")[0];
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
+
+  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
   <link rel="icon" type="image/x-icon" href="logo.png">
-  <title>MYCOVIQ | Covid-19 Individual Quarantine System</title>
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <script src="js/bootstrap.bundle.min.js"></script>
+  <title>MYCOVIQ | COVID-19 INDIVIDUAL QUARANTINE</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -84,40 +90,40 @@ $date = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$id'")[0];
     <input type="hidden" name="masa_kemaskini" id="masa_kemaskini" value="<?= date('h:i:s A'); ?>">
     <label>
       1. Sakit Tekak?<br />
-      <input type="radio" name="sakit_tekak" value="Ada">Ada <br />
-      <input type="radio" name="sakit_tekak" value="Tiada">Tiada
+      <input type="radio" name="sakit_tekak" value='<i class="fas fa-check-circle" style="color: green;"></i>'>Ada <br />
+      <input type="radio" name="sakit_tekak" value='<i class="fas fa-times-circle" style="color: red;"></i>'>Tiada
     </label>
 
     <br /> <br />
 
     <label>
       2. Selesema?<br />
-      <input type="radio" name="selesema" value="Ada">Ada <br />
-      <input type="radio" name="selesema" value="Tiada">Tiada
+      <input type="radio" name="selesema" value='<i class="fas fa-check-circle" style="color: green;"></i>'>Ada <br />
+      <input type="radio" name="selesema" value='<i class="fas fa-times-circle" style="color: red;"></i>'>Tiada
     </label>
 
     <br /> <br />
 
     <label>
       3. Batuk?<br />
-      <input type="radio" name="batuk" value="Ada">Ada <br />
-      <input type="radio" name="batuk" value="Tiada">Tiada
+      <input type="radio" name="batuk" value='<i class="fas fa-check-circle" style="color: green;"></i>'>Ada <br />
+      <input type="radio" name="batuk" value='<i class="fas fa-times-circle" style="color: red;"></i>'>Tiada
     </label>
 
     <br /> <br />
 
     <label>
       4. Demam?<br />
-      <input type="radio" name="demam" value="Ada">Ada <br />
-      <input type="radio" name="demam" value="Tiada">Tiada
+      <input type="radio" name="demam" value='<i class="fas fa-check-circle" style="color: green;"></i>'>Ada <br />
+      <input type="radio" name="demam" value='<i class="fas fa-times-circle" style="color: red;"></i>'>Tiada
     </label>
 
     <br /> <br />
 
     <label>
       5. Loya dan Muntah?<br />
-      <input type="radio" name="loya_muntah" value="Ada">Ada <br />
-      <input type="radio" name="loya_muntah" value="Tiada">Tiada
+      <input type="radio" name="loya_muntah" value='<i class="fas fa-check-circle" style="color: green;"></i>'>Ada <br />
+      <input type="radio" name="loya_muntah" value='<i class="fas fa-times-circle" style="color: red;"></i>'>Tiada
     </label>
 
     <br /> <br />
@@ -138,24 +144,24 @@ $date = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$id'")[0];
 
     <label>
       8. Kesukaran bernafas?<br />
-      <input type="radio" name="kesukaran_bernafas" value="Ada">Ada <br />
-      <input type="radio" name="kesukaran_bernafas" value="Tiada">Tiada
+      <input type="radio" name="kesukaran_bernafas" value='<i class="fas fa-check-circle" style="color: green;"></i>'>Ada <br />
+      <input type="radio" name="kesukaran_bernafas" value='<i class="fas fa-times-circle" style="color: red;"></i>'>Tiada
     </label>
 
     <br /> <br />
 
     <label>
       9. Hilang Deria Rasa?<br />
-      <input type="radio" name="deria_rasa" value="Ada">Ada <br />
-      <input type="radio" name="deria_rasa" value="Tiada">Tiada
+      <input type="radio" name="deria_rasa" value='<i class="fas fa-check-circle" style="color: green;"></i>'>Ada <br />
+      <input type="radio" name="deria_rasa" value='<i class="fas fa-times-circle" style="color: red;"></i>'>Tiada
     </label>
 
     <br /> <br />
 
     <label>
       10. Hilang Deria Bau?<br />
-      <input type="radio" name="deria_bau" value="Ada">Ada <br />
-      <input type="radio" name="deria_bau" value="Tiada">Tiada
+      <input type="radio" name="deria_bau" value='<i class="fas fa-check-circle" style="color: green;"></i>'>Ada <br />
+      <input type="radio" name="deria_bau" value='<i class="fas fa-times-circle" style="color: red;"></i>'>Tiada
     </label>
 
     <br /> <br />

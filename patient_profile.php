@@ -48,7 +48,7 @@ $patient = query("SELECT * FROM patient WHERE patient_id = " . $_SESSION['login_
 
 <body>
   <form method="POST" action="" enctype="multipart/form-data">
-    <a href="index.php?id=<?= $_SESSION['login_id']; ?>">Kembali ke halaman utama</a>
+    <a href="index.php">Kembali ke halaman utama</a>
     <h1>Akaun Pengguna</h1>
     <input type="hidden" name="patient_id" value="<?= $patient['patient_id']; ?>">
     <table border="1" cellpadding="10" cellspacing="0">

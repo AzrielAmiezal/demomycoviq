@@ -20,7 +20,7 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
   if ($responseData->success) {
     if (editProfile($_POST) > 0) {
       echo "<script>
-                alert('Profile telah dikemaskini');
+                alert('Profile akaun anda berjaya dikemaskini');
                 document.location.href = 'index.php';
             </script>";
     } else {
@@ -57,33 +57,35 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
       <li>
         <label>
           Nama Pengguna:
-          <input type="text" name="patientName" id="patientName" value="<?= $pt['patientName']; ?>" disabled>
+          <input type="text" name="patientName" id="patientName" value="<?= $pt['patientName']; ?>" autocomplete="off" required>
         </label>
       </li>
       <li>
         <label>
-          No IC / Passport (tanpa "-") :
-          <input type="text" name="patient_icNo" id="patient_icNo" value="<?= $pt['patient_icNo']; ?>" autocomplete="off">
+          No IC / Passport (tanpa "-" / space) :
+          <input type="text" name="patient_icNo" id="patient_icNo" value="<?= $pt['patient_icNo']; ?>" autocomplete="off" required>
         </label>
       </li>
       <li>
         <label>
           Alamat :
-          <input type="text" name="patient_address" id="patient_address" value="<?= $pt['patient_address']; ?>" autocomplete="off">
+          <input type="text" name="patient_address" id="patient_address" value="<?= $pt['patient_address']; ?>" autocomplete="off" required>
         </label>
       </li>
       <li>
         <label>
-          No Tel :
-          <input type="text" name="patient_telNo" id="patient_telNo" value="<?= $pt['patient_telNo']; ?>" autocomplete="off">
+          No Telefon :
+          <input type="text" name="patient_telNo" id="patient_telNo" value="<?= $pt['patient_telNo']; ?>" autocomplete="off" required>
         </label>
       </li>
       <li>
         <label>
-          Emel:
+          Email:
           <input type="text" name="patientEmail" id="patientEmail" value="<?= $pt['patientEmail']; ?>" disabled>
         </label>
       </li>
+
+      <input type="hidden" name="patient_profileImg" id="patient_profileImg" value="default.jpg" readonly>
 
       <br />
 

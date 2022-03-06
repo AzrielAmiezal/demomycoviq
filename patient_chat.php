@@ -94,7 +94,7 @@ if (isset($_GET['enter'])) {
           });
         }
 
-        setInterval(loadLog, 2500);
+        setInterval(loadLog, 500);
 
         $("#exit").click(function() {
           var exit = confirm("Are you sure you want to end the session?");

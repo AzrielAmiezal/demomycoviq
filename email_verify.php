@@ -19,18 +19,18 @@ if (isset($_GET['email']) && isset($_GET['code'])) {
         mysqli_query($conn, $update);
         if (mysqli_affected_rows($conn) == 1) {
           echo "<script>
-                alert('You have successfully verified account. Please login!');
+                alert('Email anda berjaya disahkan. Sila log masuk ke MYCOVIQ.');
                 document.location.href = 'patient_login.php';
             </script>";
         } else {
           echo "<script>
-                alert('Email verification failed');
+                alert('Pengesahan email gagal.Sila cuba lagi.');
                 document.location.href = 'patient_login.php';
             </script>";
         }
       } else {
         echo "<script>
-                alert('Email already registered');
+                alert('Email sudah disahkan. Sila log masuk ke MYCOVIQ.');
                 document.location.href = 'patient_login.php';
             </script>";
       }

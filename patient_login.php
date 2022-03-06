@@ -32,7 +32,8 @@ $client->setClientId('592618045940-hs0cv3dje56ucconuakc6lhm7f7vghme.apps.googleu
 // Enter your Client Secrect
 $client->setClientSecret('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');
 // Enter the Redirect URL
-$client->setRedirectUri('http://localhost/demomycoviq/patient_login.php');
+// $client->setRedirectUri('http://localhost/demomycoviq/patient_login.php');
+$client->setRedirectUri('http://demomycoviq.hopto.org/');
 
 // Adding those scopes which we want to get (email & profile Information)
 $client->addScope("email");
@@ -136,7 +137,7 @@ else :
                         <div class="card-body p-0">
                             <!-- Nested Row within Card Body -->
                             <div class="row">
-                                <div class="col-lg-6 d-none d-lg-block"></div>
+                                <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
                                 <div class="col-lg-6">
                                     <div class="p-5">
                                         <div class="text-center">
@@ -145,10 +146,10 @@ else :
                                         <form class="user" action="" method="POST">
                                             <!-- <form class="user"> -->
                                             <?php if (isset($login['error'])) : ?>
-                                                <p style="color:red; font-style:italic;"><?= $login['message']; ?></p>
+                                                <p class="alert alert-danger" role="alert" style="text-align: center; font-size: small;"><?= $login['message']; ?></p>
                                             <?php endif; ?>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control form-control-user" name="patientEmail" id="patientEmail" autocomplete="off" placeholder="Masukkan Emel" required>
+                                            <div class=" form-group">
+                                                <input type="text" class="form-control form-control-user" name="patientEmail" id="patientEmail" autocomplete="off" placeholder="Masukkan Email atau NO IC" required>
                                             </div>
                                             <div class="form-group">
                                                 <input type="password" class="form-control form-control-user" name="patientPassword" id="myInput" placeholder="Masukkan Kata Laluan">

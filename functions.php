@@ -41,14 +41,14 @@ function addHealthStatusReport($data)
 {
   $conn = connection();
 
-  $sakit_tekak = htmlspecialchars($data['sakit_tekak']);
-  $selesema = htmlspecialchars($data['selesema']);
-  $batuk = htmlspecialchars($data['batuk']);
-  $demam = htmlspecialchars($data['demam']);
-  $loya_muntah = htmlspecialchars($data['loya_muntah']);
-  $kesukaran_bernafas = htmlspecialchars($data['kesukaran_bernafas']);
-  $deria_rasa = htmlspecialchars($data['deria_rasa']);
-  $deria_bau = htmlspecialchars($data['deria_bau']);
+  $sakit_tekak = $data['sakit_tekak'];
+  $selesema = $data['selesema'];
+  $batuk = $data['batuk'];
+  $demam = $data['demam'];
+  $loya_muntah = $data['loya_muntah'];
+  $kesukaran_bernafas = $data['kesukaran_bernafas'];
+  $deria_rasa = $data['deria_rasa'];
+  $deria_bau = $data['deria_bau'];
   $tarikh_kemaskini = $data['tarikh_kemaskini'];
   $hari_kemaskini = $data['hari_kemaskini'];
   $masa_kemaskini = $data['masa_kemaskini'];
@@ -121,7 +121,7 @@ function patientLogin($data)
   $patientEmail = htmlspecialchars($data['patientEmail']);
   $patientPassword = htmlspecialchars($data['patientPassword']);
 
-  $query = sprintf("SELECT * FROM patient WHERE patientEmail = '%s'", mysqli_real_escape_string($conn, $patientEmail));
+  $query = sprintf("SELECT * FROM patient WHERE patientEmail = '%s' OR patient_IcNo = '%s'", mysqli_real_escape_string($conn, $patientEmail), mysqli_real_escape_string($conn, $patientEmail));
   $patient = mysqli_query($conn, $query);
   //check email
   if (mysqli_num_rows($patient) == 1) {
@@ -131,7 +131,7 @@ function patientLogin($data)
 
       if ($row['is_verified'] == 0) {
         echo "<script>
-                alert('Email is not verify yet');
+                alert('Email belum disahkan. Sila semak link verifikasi akaun di email anda.');
                 document.location.href = 'patient_login.php';
             </script>";
       } else {
@@ -150,7 +150,7 @@ function patientLogin($data)
   }
   return [
     'error' => true,
-    'message' => 'Wrong Username / Password!'
+    'message' => 'Emel / Kata laluan salah!'
   ];
 }
 
@@ -175,10 +175,13 @@ function sendMail($patientEmail, $v_code)
 
     //Content
     $mail->isHTML(true);                                        //Set email format to HTML
-    $mail->Subject = 'Email Verification for MyCOVIQ';
-    $mail->Body    = "Thanks for registration!
-    Click the link below to verify the email address
-    <a href='http://localhost/demomycoviq/email_verify.php?email=$patientEmail&code=$v_code'>Verify Now</a>";
+    $mail->Subject = 'VERIFIKASI PENDAFTARAN AKAUN MYCOVIQ';
+    // $mail->Body    = "Terima Kasih kerana mendaftar!
+    // Sila klik link di bawah untuk mengesahkan email anda.
+    // <a href='http://localhost/demomycoviq/email_verify.php?email=$patientEmail&code=$v_code'>Verify Now</a>";
+    $mail->Body    = "Terima Kasih kerana mendaftar!
+    Sila klik link di bawah untuk mengesahkan email anda.
+    <a href='http://localhost/email_verify.php?email=$patientEmail&code=$v_code'>Verify Now</a>";
 
     $mail->send();
     return true;
@@ -195,21 +198,21 @@ function patientRegister($data)
   $patientICNo = htmlspecialchars($data['patient_icNo']);
   $patientAddress = htmlspecialchars(ucwords(strtolower($data['patient_address'])));
   $patientTelNo = htmlspecialchars($data['patient_telNo']);
-  $patientEmail = htmlspecialchars($data['patientEmail']);
+  $patientEmail = htmlspecialchars(strtolower($data['patientEmail']));
   $patientPassword1 = mysqli_real_escape_string($conn, $data['patientPassword1']);
   $patientPassword2 = mysqli_real_escape_string($conn, $data['patientPassword2']);
 
   //upload pictures
-  $patientImage = uploadPicture();
-  if (!$patientImage) {
-    return false;
-  }
+  // $patientImage = uploadPicture();
+  // if (!$patientImage) {
+  //   return false;
+  // }
 
   //if username or password is empty
-  if (empty($patientName) || empty($patientICNo) || empty($patientAddress) || empty($patientTelNo) || empty($patientEmail) || empty($patientPassword1) || empty($patientPassword2) || empty($patientImage)) {
+  if (empty($patientName) || empty($patientICNo) || empty($patientAddress) || empty($patientTelNo) || empty($patientEmail) || empty($patientPassword1) || empty($patientPassword2)) {
 
     echo "<script>
-                alert('All fields cannot be empty!');
+                alert('Sila isi semua maklumat yang diperlukan!');
                 document.location.href = 'patient_register.php';
             </script>";
 
@@ -219,7 +222,7 @@ function patientRegister($data)
   if (!filter_var($patientEmail, FILTER_VALIDATE_EMAIL)) {
 
     echo "<script>
-                alert('Please enter a valid email address!');
+                alert('Sila masukkan email yang sah!');
                 document.location.href = 'patient_register.php';
             </script>";
 
@@ -230,7 +233,7 @@ function patientRegister($data)
   if (query("SELECT * FROM patient WHERE patientEmail = '$patientEmail'")) {
 
     echo "<script>
-                alert('Email already registered! Please Login');
+                alert('Email sudah didaftarkan. Sila log masuk.');
                 document.location.href = 'patient_register.php';
             </script>";
 
@@ -241,7 +244,7 @@ function patientRegister($data)
   if (query("SELECT * FROM patient WHERE patient_icNo = '$patientICNo'")) {
 
     echo "<script>
-                alert('IC / Passport No is already registered! Please Login');
+                alert('No IC / Passport sudah didaftarkan. Sila log masuk.');
                 document.location.href = 'patient_register.php';
             </script>";
 
@@ -252,7 +255,7 @@ function patientRegister($data)
   if (query("SELECT * FROM patient WHERE patient_telNo = '$patientTelNo'")) {
 
     echo "<script>
-                alert('Phone number is already registered! Please Login');
+                alert('No telefon sudah didaftarkan! Sila log masuk.');
                 document.location.href = 'patient_register.php';
             </script>";
 
@@ -263,7 +266,7 @@ function patientRegister($data)
   if ($patientPassword1 !== $patientPassword2) {
 
     echo "<script>
-                alert('Password not matched!');
+                alert('Kata laluan tidak sepadan. Sila masukkan kata laluan yang sah.');
                 document.location.href = 'patient_register.php';
             </script>";
 
@@ -274,7 +277,7 @@ function patientRegister($data)
   if (strlen($patientPassword1 < 5)) {
 
     echo "<script>
-                alert('Password too short!');
+                alert('Kata laluan terlalu pendek. Maksimum 8-10 perkataan / simbol');
                 document.location.href = 'patient_register.php';
             </script>";
 
@@ -288,7 +291,7 @@ function patientRegister($data)
   //insert to table user
   $query = "INSERT INTO patient
                 VALUES
-                (null,0,'$patientName','$patientICNo','$patientAddress',$patientTelNo,'$patientEmail','$patient_new_password','$v_code',0,'$patientImage')";
+                (null,0,'$patientName','$patientICNo','$patientAddress',$patientTelNo,'$patientEmail','$patient_new_password','$v_code',0,'default.jpg')";
   sendMail($patientEmail, $v_code);
   mysqli_query($conn, $query) or die(mysqli_error($conn));
   return mysqli_affected_rows($conn);
@@ -319,7 +322,7 @@ function uploadPicture()
   //check valid file extension
   if (!in_array($file_extension, $file_register)) {
     echo "<script>
-            alert('Please upload a valid format such as JPG, JPEG & PNG only!');
+            alert('Sila muat naik format JPG, JPEG & PNG sahaja!');
         </script>";
 
     return false;
@@ -329,7 +332,7 @@ function uploadPicture()
   if ($file_type != 'image/jpeg' && $file_type != 'image/png') {
 
     echo "<script>
-            alert('Please upload a valid format such as JPG, JPEG & PNG only!');
+            alert('Sila muat naik format JPG, JPEG & PNG sahaja!');
         </script>";
 
     return false;
@@ -340,7 +343,7 @@ function uploadPicture()
   if ($file_size > 5000000) {
 
     echo "<script>
-            alert('File too large. Please upload minimum file size 5MB only! ');
+            alert('Dokumen terlalu besar. Sila muat naik dokumen minimum saiz 5MB only! ');
         </script>";
 
     return false;
@@ -389,20 +392,19 @@ function editProfile($data)
   $conn = connection();
 
   $id = $_GET['id'];
-  // $patientName = htmlspecialchars($data['patientName']);
+  $patientName = htmlspecialchars($data['patientName']);
   $patientICNo = htmlspecialchars($data['patient_icNo']);
   $patientAddress = htmlspecialchars($data['patient_address']);
   $patientTelNo = htmlspecialchars($data['patient_telNo']);
   //$patientEmail = htmlspecialchars($data['patientEmail']);
-  //$patientProfileImg = htmlspecialchars($data['patient_profileImg']);
+  $patientProfileImg = htmlspecialchars($data['patient_profileImg']);
 
   $query = "UPDATE patient SET
-                
+                patientName = '$patientName',    
                 patient_icNo = '$patientICNo',
                 patient_address = '$patientAddress',
-                patient_telNo = '$patientTelNo'
-                
-               
+                patient_telNo = '$patientTelNo',
+                patient_profileImg = '$patientProfileImg'
             WHERE patient_id = $id";
 
   mysqli_query($conn, $query) or die(mysqli_error($conn));
@@ -425,7 +427,7 @@ function adminRegister($data)
   if (empty($adminName) || empty($adminUserName) || empty($adminTelno) || empty($adminEmail) || empty($adminPassword1) || empty($adminPassword2) || empty($adminProfileImage)) {
 
     echo "<script>
-                alert('All fields cannot be empty!');
+                alert('Sila isi semua maklumat yang diperlukan!');
                 document.location.href = 'admin_register.php';
             </script>";
 
@@ -436,7 +438,7 @@ function adminRegister($data)
   if (query("SELECT * FROM `admin` WHERE `admin_email` = '$adminEmail'")) {
 
     echo "<script>
-                alert('Email already registered! Please Login');
+                alert('Email sudah didaftarkan. Sila log masuk.');
                 document.location.href = 'admin_register.php';
             </script>";
 
@@ -447,7 +449,7 @@ function adminRegister($data)
   if (query("SELECT * FROM `admin` WHERE `admin_telNo` = '$adminTelno'")) {
 
     echo "<script>
-                alert('Admin phone number is already registered! Please Login');
+                alert('No telefon sudah didaftarkan! Sila log masuk.');
                 document.location.href = 'admin_register.php';
             </script>";
 
@@ -458,7 +460,7 @@ function adminRegister($data)
   if ($adminPassword1 !== $adminPassword2) {
 
     echo "<script>
-                alert('Password not matched!');
+                alert('Kata laluan tidak sepadan. Sila masukkan kata laluan yang sah.');
                 document.location.href = 'admin_register.php';
             </script>";
 
@@ -469,7 +471,7 @@ function adminRegister($data)
   if (strlen($adminPassword1 < 5)) {
 
     echo "<script>
-                alert('Password too short!');
+                alert('Kata laluan terlalu pendek. Maksimum 8-10 perkataan / simbol);
                 document.location.href = 'admin_register.php';
             </script>";
 
@@ -513,7 +515,7 @@ function adminLogin($data)
   }
   return [
     'error' => true,
-    'message' => 'Wrong Username / Password!'
+    'message' => 'Nama Pengguna atau Kata laluan salah!'
   ];
 }
 

@@ -9,8 +9,9 @@ if (!isset($_SESSION['login'])) {
   exit;
 }
 
+$conn = connection();
 $id = $_SESSION['login_id'];
-$health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemaskini_kesihatan.*,deklarasi_harian.* 
+$health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperature.*,sesi_kemaskini_kesihatan.*,deklarasi_harian.* 
                         FROM health_status 
                           JOIN spo2 
                             ON health_status.spo2_id = spo2.spo2_id 
@@ -25,11 +26,10 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
                           JOIN deklarasi_harian
                             ON health_status.patient_id = deklarasi_harian.patient_id
                           WHERE health_status.patient_id = '$id'");
-// $conn = connection();
-// $patient = mysqli_query($conn, "SELECT * FROM patient WHERE patient_id = '$id'");
+
 // echo "patient id =" . $_SESSION['patient_id'];
 // echo "google id =" . $_SESSION['google_id'];
-// echo $_SESSION['patientName'];
+
 
 ?>
 
@@ -42,7 +42,7 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <link rel="icon" type="image/x-icon" href="logo.png">
+  <link rel="icon" type="image/x-icon" href="logo1.png">
   <title>MYCOVIQ | COVID-19 INDIVIDUAL QUARANTINE</title>
 
   <!-- Custom fonts for this template-->
@@ -54,185 +54,185 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
 </head>
 
 <body id="page-top">
-  <form method="POST" action="">
-    <!-- Page Wrapper -->
-    <div id="wrapper">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
 
 
-      <!-- Sidebar -->
-      <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <!-- Sidebar -->
+    <ul class="navbar-nav sidebar sidebar-dark accordion toggled" id="accordionSidebar" style="background-color: #73B00B;">
 
-        <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-          <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
-          </div>
-          <div class="sidebar-brand-text mx-3">MYCOVIQ</div>
-        </a>
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
+        <!-- <div class="sidebar-brand-icon rotate-n-15"> -->
+        <!-- <i class="fas fa-laugh-wink"></i> -->
+        MYCOVIQ
+        <!-- </div> -->
+        <div class="sidebar-brand-text mx-3">MYCOVIQ</div>
+      </a>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
 
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-          <a class="nav-link" href="index.php?id=<?= $_SESSION['patient_id']; ?>">
-            <i class="fas fa-fw fa-home"></i>
-            <span>Utama</span></a>
-        </li>
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+        <a class="nav-link" href="index.php?id=<?= $_SESSION['patient_id']; ?>">
+          <i class="fas fa-fw fa-home"></i>
+          <span>Utama</span></a>
+      </li>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider">
+      <!-- Divider -->
+      <hr class="sidebar-divider">
 
-        <!-- Heading -->
-        <div class="sidebar-heading">
-          Menu
-        </div>
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Menu
+      </div>
 
-        <!-- Nav Item - Charts -->
-        <li class="nav-item">
-          <a class="nav-link" href="deklarasi_kesihatan_harian.php?id=<?= $_SESSION['patient_id']; ?>">
-            <i class="fas fa-fw fa-file-medical"></i>
-            <span>Deklarasi Kendiri</span></a>
-        </li>
+      <!-- Nav Item - Deklarasi Kendiri-->
+      <li class="nav-item">
+        <a class="nav-link" href="deklarasi_kesihatan_harian.php?id=<?= $_SESSION['patient_id']; ?>">
+          <i class="fas fa-fw fa-file-medical"></i>
+          <span>Deklarasi Kendiri</span></a>
+      </li>
 
-        <!-- Nav Item - Charts -->
-        <li class="nav-item">
-          <a class="nav-link" href="patient_chat.php?id=<?= $_SESSION['patient_id']; ?>&enter=true">
-            <i class="fas fa-fw fa-comments"></i>
-            <span>Chat kami</span></a>
-        </li>
+      <!-- Nav Item - Chat-->
+      <li class="nav-item">
+        <a class="nav-link" href="patient_chat.php?id=<?= $_SESSION['patient_id']; ?>&enter=true">
+          <i class="fas fa-fw fa-comments"></i>
+          <span>Chat kami</span></a>
+      </li>
 
-        <!-- Nav Item - Charts -->
-        <li class="nav-item">
-          <a class="nav-link" href="patient_profile.php?id=<?= $_SESSION['patient_id']; ?>">
-            <i class="fas fa-fw fa-user"></i>
-            <span>Akaun Saya</span></a>
-        </li>
+      <!-- Nav Item - Profile -->
+      <!-- <li class="nav-item">
+        <a class="nav-link" href="patient_profile.php?id=<?= $_SESSION['patient_id']; ?>">
+          <i class="fas fa-fw fa-user"></i>
+          <span>Akaun Saya</span></a>
+      </li> -->
 
-        <!-- Nav Item - Charts -->
-        <li class="nav-item">
-          <a class="nav-link" href="patient_faq.php">
-            <i class="fas fa-fw fa-question-circle"></i>
-            <span>FAQ</span></a>
-        </li>
+      <!-- Nav Item - FAQ -->
+      <!-- <li class="nav-item">
+        <a class="nav-link" href="patient_faq.php">
+          <i class="fas fa-fw fa-question-circle"></i>
+          <span>FAQ</span></a>
+      </li> -->
+    </ul>
+    <!-- End of Sidebar -->
 
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
 
-        <!-- Nav Item - Charts -->
-        <li class="nav-item">
-          <a class="nav-link" href="logout.php?id=<?= $_SESSION['patient_id']; ?>">
-            <i class=" fas fa-fw fa-sign-out-alt fa-flip-horizontal"></i>
-            <span>Log Keluar</span></a>
-        </li>
+      <!-- Main Content -->
+      <div id="content">
 
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block">
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-        <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-          <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
-      </ul>
-      <!-- End of Sidebar -->
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
 
-      <!-- Content Wrapper -->
-      <div id="content-wrapper" class="d-flex flex-column">
-
-        <!-- Main Content -->
-        <div id="content">
-
-          <!-- Topbar -->
-          <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-            <!-- Sidebar Toggle (Topbar) -->
-            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-              <i class="fa fa-bars"></i>
-            </button>
-
-            <!-- Topbar Navbar -->
-            <ul class="navbar-nav ml-auto">
-              <!-- Nav Item - Alerts -->
-              <li class="nav-item dropdown no-arrow mx-1">
-                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="fas fa-bell fa-fw"></i>
-                  <!-- Counter - Alerts -->
-                  <span class="badge badge-danger badge-counter">3+</span>
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
+            <!-- Nav Item - Alerts -->
+            <li class="nav-item dropdown no-arrow mx-1">
+              <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-bell fa-fw"></i>
+                <!-- Counter - Alerts -->
+                <span class="badge badge-danger badge-counter">3+</span>
+              </a>
+              <!-- Dropdown - Alerts -->
+              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                <h6 class="dropdown-header">
+                  Alerts Center
+                </h6>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-primary">
+                      <i class="fas fa-file-alt text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">December 12, 2019</div>
+                    <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                  </div>
                 </a>
-                <!-- Dropdown - Alerts -->
-                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-                  <h6 class="dropdown-header">
-                    Alerts Center
-                  </h6>
-                  <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="mr-3">
-                      <div class="icon-circle bg-primary">
-                        <i class="fas fa-file-alt text-white"></i>
-                      </div>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-success">
+                      <i class="fas fa-donate text-white"></i>
                     </div>
-                    <div>
-                      <div class="small text-gray-500">December 12, 2019</div>
-                      <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                    </div>
-                  </a>
-                  <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="mr-3">
-                      <div class="icon-circle bg-success">
-                        <i class="fas fa-donate text-white"></i>
-                      </div>
-                    </div>
-                    <div>
-                      <div class="small text-gray-500">December 7, 2019</div>
-                      $290.29 has been deposited into your account!
-                    </div>
-                  </a>
-                  <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="mr-3">
-                      <div class="icon-circle bg-warning">
-                        <i class="fas fa-exclamation-triangle text-white"></i>
-                      </div>
-                    </div>
-                    <div>
-                      <div class="small text-gray-500">December 2, 2019</div>
-                      Spending Alert: We've noticed unusually high spending for your account.
-                    </div>
-                  </a>
-                  <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                </div>
-              </li>
-
-              <div class="topbar-divider d-none d-sm-block"></div>
-
-              <!-- Nav Item - User Information -->
-              <li class="nav-item dropdown no-arrow">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= strtoupper($_SESSION['patientName']);  ?></span>
-                  <img class="img-profile rounded-circle" src="img/default.jpg">
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">December 7, 2019</div>
+                    $290.29 has been deposited into your account!
+                  </div>
                 </a>
-                <!-- Dropdown - User Information -->
-                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                  <a class="dropdown-item" href="#">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Akaun Saya
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Tetapan
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Log Keluar
-                  </a>
-                </div>
-              </li>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-warning">
+                      <i class="fas fa-exclamation-triangle text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">December 2, 2019</div>
+                    Spending Alert: We've noticed unusually high spending for your account.
+                  </div>
+                </a>
+                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+              </div>
+            </li>
 
-            </ul>
+            <div class="topbar-divider d-none d-sm-block"></div>
 
-          </nav>
-          <!-- End of Topbar -->
+            <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <?php
+                // To fetch picture from phpmyadmin
+                $conn = connection();
+                $patient = mysqli_query($conn, "SELECT * FROM patient WHERE patient_id = '$id'");
+                $rows = mysqli_fetch_array($patient);
 
+                ?>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= strtoupper($rows['patientName']);  ?></span>
+                <img class="img-profile rounded-circle" src="img/<?= $rows['patient_profileImg'] ?>">
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="patient_profile.php?id=<?= $_SESSION['patient_id']; ?>">
+                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Akaun Saya
+                </a>
+                <a class="dropdown-item" href="changePassword.php?id=<?= $_SESSION['patient_id']; ?>">
+                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Tukar kata laluan
+                </a>
+                <a class="dropdown-item" href="">
+                  <i class="fas fa-sm fa-fw fa-question-circle mr-2 text-gray-400"></i>
+                  FAQ
+                </a>
+                <a class="dropdown-item" href="">
+                  <i class="fas fa-info fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Privacy Policy
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Log Keluar
+                </a>
+              </div>
+            </li>
+
+          </ul>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <form method="POST" action="">
           <!-- Begin Page Content -->
           <div class="container-fluid">
-
             <!-- Page Heading -->
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
               <h4 class="h3 mb-0 text-gray-800">Paparan Deklarasi Kesihatan Harian pada <?= date('d M Y h:i:s A'); ?></h4>
@@ -242,14 +242,22 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
 
             <div class="row">
 
-              <!-- Area Chart -->
+              <!-- Area Chart 1 -->
               <?php
+              //echo mysqli_num_rows($health_status);
               foreach ($health_status as $s) {
-                $tarikh[] = $s['tarikh_kemaskini'];
-                $spo2[] = $s['spo2_level'];
+
+                if (mysqli_num_rows($health_status) > 0) {
+                  $tarikh[] = $s['tarikh_kemaskini'];
+                  $spo2[] = $s['spo2_level'];
+                } else {
+                  $tarikh[] = [["0"]];
+                  $spo2[] = [["0"]];
+                  //echo "tkde data kimek";
+                }
               }
               ?>
-              <div class="col-xl-8 col-lg-7">
+              <div class="col-xl-6 col-lg-7">
                 <div class="card shadow mb-4">
                   <!-- Card Header - Dropdown -->
                   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -258,52 +266,26 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
                   <!-- Card Body -->
                   <div class="card-body">
                     <div class="chart-area">
-                      <canvas id="spo2_chart"></canvas>
+                      <?php
+                      if (mysqli_num_rows($health_status) < 1) {
+                        echo '<p class="d-flex justify-content-center pt-5" style="color: red; text-align:center;">Tiada Maklumat</p>';
+                      } else { ?>
+                        <canvas id="spo2_chart"></canvas>
+                      <?php } ?>
                     </div>
                   </div>
                 </div>
               </div>
               <!-- end of Area Chart -->
 
-              <!-- Pie Chart -->
-              <div class="col-xl-4 col-lg-5">
-                <div class="card shadow mb-4">
-                  <!-- Card Header - Dropdown -->
-                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Jumlah Kes Covid-19</h6>
-                  </div>
-                  <!-- Card Body -->
-                  <div class="card-body">
-                    <div class="chart-pie pt-4 pb-2">
-                      <canvas id="myPieChart"></canvas>
-                    </div>
-                    <div class="mt-4 text-center small">
-                      <span class="mr-2">
-                        <i class="fas fa-circle text-primary"></i> Direct
-                      </span>
-                      <span class="mr-2">
-                        <i class="fas fa-circle text-success"></i> Social
-                      </span>
-                      <span class="mr-2">
-                        <i class="fas fa-circle text-info"></i> Referral
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-            <!-- Content Row -->
-            <div class="row">
-              <!-- Area Chart -->
+              <!-- Area Chart 2 -->
               <?php
               foreach ($health_status as $t) {
                 $tarikh2[] = $t['tarikh_kemaskini'];
                 $temperature[] = $t['temperature_level'];
               }
               ?>
-              <div class="col-xl-8 col-lg-7">
+              <div class="col-xl-6 col-lg-7">
                 <div class="card shadow mb-4">
                   <!-- Card Header - Dropdown -->
                   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -312,40 +294,19 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
                   <!-- Card Body -->
                   <div class="card-body">
                     <div class="chart-area">
-                      <canvas id="temperature_chart"></canvas>
+                      <?php
+                      if (mysqli_num_rows($health_status) < 1) {
+                        echo '<p class="d-flex justify-content-center pt-5" style="color: red; text-align:center;">Tiada Maklumat</p>';
+                      } else { ?>
+                        <canvas id="temperature_chart"></canvas>
+                      <?php } ?>
+
                     </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Pie Chart -->
-              <div class="col-xl-4 col-lg-5">
-                <div class="card shadow mb-4">
-                  <!-- Card Header - Dropdown -->
-                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Jumlah Vaksinasi Harian</h6>
-                  </div>
-                  <!-- Card Body -->
-                  <div class="card-body">
-                    <div class="chart-pie pt-4 pb-2">
-                      <canvas id="myPieChart"></canvas>
-                    </div>
-                    <div class="mt-4 text-center small">
-                      <span class="mr-2">
-                        <i class="fas fa-circle text-primary"></i> Direct
-                      </span>
-                      <span class="mr-2">
-                        <i class="fas fa-circle text-success"></i> Social
-                      </span>
-                      <span class="mr-2">
-                        <i class="fas fa-circle text-info"></i> Referral
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
-
 
             <!-- Content Row -->
             <div class="row">
@@ -363,7 +324,7 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
                         <thead class="table-dark" align="center">
                           <tr>
                             <th scope="col">Tarikh/Masa Kemaskini</th>
-                            <th scope="col">Sesi</th>
+                            <th scope="col">Sesi Kemaskini</th>
                             <th scope="col">Sakit Tekak</th>
                             <th scope="col">Selesema</th>
                             <th scope="col">Batuk</th>
@@ -374,6 +335,13 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
                             <th scope="col">Hilang Deria Bau</th>
                           </tr>
                         </thead>
+                        <?php if (mysqli_num_rows($health_status) < 1) : ?>
+                          <tr>
+                            <td colspan="10">
+                              <p style="color: red; text-align:center;">Tiada Maklumat</p>
+                            </td>
+                          </tr>
+                        <?php endif; ?>
                         <tbody align="center">
                           <?php $i = 1;
                           foreach ($health_status as $hs) : ?>
@@ -398,58 +366,85 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
                 </div>
               </div>
 
-              <div class="col-lg-6 mb-4">
-                <!-- content -->
+            </div>
+
+            <!-- Content Row for PIE CHARTS -->
+            <div class="row">
+              <!-- Pie Chart 1 -->
+              <div class="col-xl-6 col-lg-7">
+                <div class="card shadow mb-4">
+                  <!-- Card Header - Dropdown -->
+                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Jumlah Kes Covid-19 di Malaysia</h6>
+                  </div>
+                  <!-- Card Body -->
+                  <div class="card-body">
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pie Chart 2 -->
+              <div class="col-xl-6 col-lg-7">
+                <div class="card shadow mb-4">
+                  <!-- Card Header - Dropdown -->
+                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Jumlah Vaksinasi Harian di Malaysia</h6>
+                  </div>
+                  <!-- Card Body -->
+                  <div class="card-body">
+
+                  </div>
+                </div>
               </div>
             </div>
 
           </div>
           <!-- /.container-fluid -->
-
-        </div>
-        <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-          <div class="container my-auto">
-            <div class="copyright text-center my-auto">
-              <span>Copyright &copy;2021 - <?= date('Y'); ?>, All right reserved.</span>
-            </div>
-          </div>
-        </footer>
-        <!-- End of Footer -->
-
+        </form>
       </div>
-      <!-- End of Content Wrapper -->
+      <!-- End of Main Content -->
 
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-      <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Anda pasti untuk log keluar?</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">Pilih "Logout" jika anda memilih untuk tamatkan sesi.</div>
-          <div class="modal-footer">
-            <a class="btn btn-danger" href="logout.php?id=<?= $_SESSION['patient_id']; ?>">Logout</a>
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
-            <!-- <a class="btn btn-primary" href="login.html">Logout</a> -->
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy;2021 - <?= date('Y'); ?>, All right reserved.</span>
           </div>
         </div>
+      </footer>
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Anda pasti untuk log keluar?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Pilih "Logout" jika anda memilih untuk tamatkan sesi.</div>
+        <div class="modal-footer">
+          <a class="btn btn-danger" href="logout.php?id=<?= $_SESSION['patient_id']; ?>">Logout</a>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+          <!-- <a class="btn btn-primary" href="login.html">Logout</a> -->
+        </div>
       </div>
     </div>
-  </form>
+  </div>
   <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -501,7 +496,7 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
     var myLineChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: <?= json_encode($tarikh); ?>,
+        labels: <?= json_encode($tarikh) ?>,
         datasets: [{
           label: "sPo2",
           lineTension: 0.3,
@@ -515,7 +510,7 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
           pointHoverBorderColor: "rgba(78, 115, 223, 1)",
           pointHitRadius: 10,
           pointBorderWidth: 2,
-          data: <?= json_encode($spo2); ?>,
+          data: <?= json_encode($spo2) ?>,
         }],
       },
       options: {
@@ -676,9 +671,6 @@ $health_status = query("SELECT health_status.*, spo2.*, temperature.*,sesi_kemas
       }
     });
   </script>
-
-
-
 </body>
 
 </html>

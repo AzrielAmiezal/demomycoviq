@@ -1,6 +1,9 @@
 <?php
 session_start();
 require '../functions.php';
+require '../PHPMailer/PHPMailer.php';
+require '../PHPMailer/Exception.php';
+require '../PHPMailer/SMTP.php';
 
 //check whether the submit button is click or not
 if (isset($_POST['submit'])) {
@@ -19,7 +22,11 @@ if (isset($_POST['submit'])) {
   }
 }
 
-//echo $_GET['patient'];
+$conn = connection();
+$id = $_GET['patient'];
+$result = mysqli_query($conn, "SELECT * FROM patient WHERE patient_id = '$id'");
+$rows = mysqli_fetch_assoc($result);
+// echo 'Email:' . $rows['patientEmail'];
 
 ?>
 
@@ -40,7 +47,9 @@ if (isset($_POST['submit'])) {
 
 <body>
   <form method="POST" action="">
-
+    <input type="hidden" name="patientName" id="patientName" value="<?= $rows['patientName']; ?>">
+    <input type="hidden" name="patient_icNo" id="patient_icNo" value="<?= $rows['patient_icNo']; ?>">
+    <input type="hidden" name="patientEmail" id="patientEmail" value="<?= $rows['patientEmail']; ?>">
     <label>
       Tahap Jangkitan Pesakit COVID-19 :
       <select name="covidStage" id="covidStage">

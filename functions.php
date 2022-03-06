@@ -155,7 +155,7 @@ function patientLogin($data)
 }
 
 //Email verification
-function sendMail($patientEmail, $v_code)
+function sendMailRegister($patientEmail, $v_code)
 {
   //Create an instance; passing `true` enables exceptions
   $mail = new PHPMailer(true);
@@ -292,7 +292,7 @@ function patientRegister($data)
   $query = "INSERT INTO patient
                 VALUES
                 (null,0,'$patientName','$patientICNo','$patientAddress',$patientTelNo,'$patientEmail','$patient_new_password','$v_code',0,'default.jpg')";
-  sendMail($patientEmail, $v_code);
+  sendMailRegister($patientEmail, $v_code);
   mysqli_query($conn, $query) or die(mysqli_error($conn));
   return mysqli_affected_rows($conn);
 }
@@ -519,20 +519,61 @@ function adminLogin($data)
   ];
 }
 
+
+function sendMailIsolation($patientEmail, $patientName, $patient_icNo)
+{
+  //Create an instance; passing `true` enables exceptions
+  $mail = new PHPMailer(true);
+  try {
+    //Server settings
+    $mail->isSMTP();                                            //Send using SMTP
+    $mail->Host       = 'smtp.gmail.com';                       //Set the SMTP server to send through
+    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+    $mail->Username   = 'aazwary0@gmail.com';                   //SMTP username
+    $mail->Password   = '991006amiezalazwary';                  //SMTP password
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+    $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+    //Recipients
+    $mail->setFrom('aazwary0@gmail.com', 'MyCOVIQ');
+    $mail->addAddress($patientEmail);                           //Add a recipient
+
+    //Content
+    $mail->isHTML(true);                                        //Set email format to HTML
+    $mail->Subject = 'MYCOVIQ: DEKLARASI HARIAN KENDIRI';
+    $mail->Body    = 'Hi ' . $patientName . ',<br/><br/>
+    Sila semak butiran deklarasi harian kendiri bagi <b>NO K/P ' . $patient_icNo . '</b> di MYCOVIQ <br/><br/>
+    <b>PASTIKAN ANDA KEMASKINI KESEMUA DEKLARASI HARIAN MENGIKUT HARI, TARIKH DAN SESI YANG DITETAPKAN SEHINGGA TAMAT TEMPOH KUARANTIN KENDIRI.</b><br/><br/>
+    Terima Kasih.<br/><br/>
+    <b>SALAM WASALAM.</b>';
+
+    $mail->send();
+    return true;
+  } catch (Exception $e) {
+    return false;
+  }
+}
+
 function addIsolation($data)
 {
   $conn = connection();
+
+  //For email purpose
+  $patientName = $data['patientName'];
+  $patientICNo = $data['patient_icNo'];
+  $patientEmail = $data['patientEmail'];
 
   $covidStage = htmlspecialchars($data['covidStage']);
   $tarikhMula = date('Y-m-d', strtotime($data['tarikh_mula']));
   $tarikhTamat = date('Y-m-d', strtotime($data['tarikh_tamat']));
   $status = htmlspecialchars($data['status_kuarantin']);
 
+
   $query = "INSERT INTO deklarasi_harian
               VALUES
               (null, " . $_GET['patient'] . ", '$covidStage','$tarikhMula','$tarikhTamat','$status') 
               ";
-
+  sendMailIsolation($patientEmail, $patientName, $patientICNo);
   mysqli_query($conn, $query) or die(mysqli_error($conn));
   return mysqli_affected_rows($conn);
 }

@@ -253,12 +253,12 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                           ?>
                             <?php
                             for ($i = $startDate; $i <= $endDate; $i->modify('+1 day')) :
-                              $date = new DateTime('2022-03-08');
+                              $date = new DateTime('2022-03-07');
                               $time1 = $i->format('Y-m-d');
                               $time2 = $date->format('Y-m-d');
                               // $hour = date('G');
                               // $minute = date('i');
-                              $hour = 14;
+                              $hour = 10;
                               $minute = 00;
                             ?>
                               <tr>
@@ -385,7 +385,7 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                             <p>Sila kemaskini kesihatan harian anda dua kali sehari, sekali di sebelah pagi dan sekali di sebelah petang, masing-masing sebelum <b>1.00 PM</b> dan <b>12 tengah malam</b> </p>
                             <p>Anda akan menjalani tempoh kuarantin selama <b><?= $a - 1; ?> hari</b> bermula pada <b><?= date('d M Y', strtotime($d['tarikh_mula'])); ?></b> dijangka tamat pada <b><?= date('d M Y', strtotime($d['tarikh_tamat'])); ?></b></p>
                             <p>Tahap Jangkitan: <?= $d['covidStage']; ?> <br /> Status: <?= $d['status_kuarantin']; ?></p>
-                            <p><i class="fas fa-pen-square" style="color:blue;"></i> : Pautan Dibuka | <i class="fas fa-times-circle" style="color:red;"></i> : Tidak dikemaskini | <i class="fas fa-times-circle" style="color:orange;"></i> : Pautan akan dibuka | <i class="fas fa-check-circle" style="color:green;"></i> : Berjaya dikemaskini</p>
+                            <p><i class="fas fa-pen-square" style="color:blue;"></i> : Pautan Dibuka | <i class="fas fa-times-circle" style="color:red;"></i> : Tidak dikemaskini | <i class="fas fa-times-circle" style="color:orange;"></i> : Pautan belum dibuka | <i class="fas fa-check-circle" style="color:green;"></i> : Berjaya dikemaskini</p>
                           <?php endif; ?>
                         </div>
                       </table>

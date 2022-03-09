@@ -430,10 +430,10 @@ function adminRegister($data)
   $adminEmail = htmlspecialchars($data['admin_email']);
   $adminPassword1 = mysqli_real_escape_string($conn, $data['admin_password1']);
   $adminPassword2 = mysqli_real_escape_string($conn, $data['admin_password2']);
-  $adminProfileImage = htmlspecialchars($data['admin_profileImg']);
+  //$adminProfileImage = htmlspecialchars($data['admin_profileImg']);
 
   //if username or password is empty
-  if (empty($adminName) || empty($adminUserName) || empty($adminTelno) || empty($adminEmail) || empty($adminPassword1) || empty($adminPassword2) || empty($adminProfileImage)) {
+  if (empty($adminName) || empty($adminUserName) || empty($adminTelno) || empty($adminEmail) || empty($adminPassword1) || empty($adminPassword2)) {
 
     echo "<script>
                 alert('Sila isi semua maklumat yang diperlukan!');
@@ -494,7 +494,7 @@ function adminRegister($data)
   //insert to table user
   $query = "INSERT INTO `admin`
                 VALUES
-                (null,'$adminName','$adminUserName','$adminTelno','$adminEmail','$admin_new_password','$adminProfileImage')";
+                (null,'$adminName','$adminUserName','$adminTelno','$adminEmail','$admin_new_password','default.jpg')";
   //sendMail($patientEmail, $v_code);
   mysqli_query($conn, $query) or die(mysqli_error($conn));
   return mysqli_affected_rows($conn);

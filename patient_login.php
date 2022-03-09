@@ -174,9 +174,9 @@ else :
                                             </a> -->
 
                                         <hr>
-                                        <div class="text-center">
+                                        <!-- <div class="text-center">
                                             <a class="small" href="forgot-password.html">Lupa Kata Laluan?</a>
-                                        </div>
+                                        </div> -->
                                         <div class="text-center">
                                             <a class="small" href="patient_register.php">Daftar Akaun!</a>
                                         </div>
@@ -187,7 +187,6 @@ else :
                     </div>
                 </div>
             </div>
-
         </div>
 
         <!-- Bootstrap core JavaScript-->
@@ -216,7 +215,7 @@ else :
 
     </body>
 
-    <footer align="center">
+    <footer align="center"=>
         <small>&copy; Copyright 2021 - <?= date('Y'); ?>, All right reserved.</small>
     </footer>
 

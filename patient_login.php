@@ -33,7 +33,8 @@ $client->setClientId('592618045940-hs0cv3dje56ucconuakc6lhm7f7vghme.apps.googleu
 $client->setClientSecret('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');
 // Enter the Redirect URL
 // $client->setRedirectUri('http://localhost/demomycoviq/patient_login.php');
-$client->setRedirectUri('http://demomycoviq.hopto.org');
+// $client->setRedirectUri('http://localhost/patient_login.php');
+$client->setRedirectUri('http://demomycoviq.ddns.net/patient_login.php');
 
 // Adding those scopes which we want to get (email & profile Information)
 $client->addScope("email");
@@ -112,9 +113,10 @@ else :
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
-        <meta name="author" content="">
-
+        <meta name="theme-color" content="#FFFFFF">
         <link rel="icon" type="image/x-icon" href="logo.png">
+        <link rel="manifest" href="manifest.json">
+        <link rel="apple-touch-icon" href="logo192.png">
         <title>MYCOVIQ | COVID-19 INDIVIDUAL QUARANTINE</title>
 
         <!-- Custom fonts for this template-->
@@ -131,14 +133,16 @@ else :
             <!-- Outer Row -->
             <div class="row justify-content-center">
 
-                <div class="col-xl-10 col-lg-12 col-md-9">
+                <!-- <div class="col-xl-10 col-lg-12 col-md-9"> -->
+                <div class="col-lg-5">
 
                     <div class="card o-hidden border-0 shadow-lg my-5">
                         <div class="card-body p-0">
                             <!-- Nested Row within Card Body -->
                             <div class="row">
-                                <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                                <div class="col-lg-6">
+                                <!-- <div class="col-lg-6 d-none d-lg-block bg-login-image"></div> -->
+                                <!-- <div class="col-lg-6"> -->
+                                <div class="col-lg">
                                     <div class="p-5">
                                         <div class="text-center">
                                             <h1 class="h4 text-gray-900 mb-4"><b>MYCOVIQ</b></h1>
@@ -195,6 +199,9 @@ else :
 
         <!-- Custom scripts for all pages-->
         <script src="js/sb-admin-2.min.js"></script>
+
+        <!-- PWA Service Worker -->
+        <script src="js/pwa/index.js"></script>
 
         <script>
             function myFunction() {

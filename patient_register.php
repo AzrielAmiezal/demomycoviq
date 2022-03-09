@@ -54,12 +54,12 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
 
     <div class="container">
 
-        <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card o-hidden border-0 shadow-lg my-5 col-lg-7 mx-auto">
             <div class="card-body p-0">
                 <!-- Nested Row within Card Body -->
                 <div class="row">
-                    <div class="col-lg-5 d-none d-lg-block"></div>
-                    <div class="col-lg-7">
+                    <!-- <div class="col-lg-5 d-none d-lg-block"></div> -->
+                    <div class="col-lg">
                         <div class="p-5">
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4"><b>Daftar Akaun</b></h1>
@@ -90,7 +90,6 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
                                 </div>
                                 <div class="form-group">
                                     <div class="g-recaptcha" data-sitekey="6Ldl_HYeAAAAAEUuybZkVB5pWBO2NURKUJo6fqeN"></div>
-
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-user btn-block" name="register">Daftar akaun</button>
                             </form>

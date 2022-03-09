@@ -179,9 +179,13 @@ function sendMailRegister($patientEmail, $v_code)
     // $mail->Body    = "Terima Kasih kerana mendaftar!
     // Sila klik link di bawah untuk mengesahkan email anda.
     // <a href='http://localhost/demomycoviq/email_verify.php?email=$patientEmail&code=$v_code'>Verify Now</a>";
+
+    // $mail->Body    = "Terima Kasih kerana mendaftar!
+    // Sila klik link di bawah untuk mengesahkan email anda.
+    // <a href='http://localhost/email_verify.php?email=$patientEmail&code=$v_code'>Verify Now</a>";
     $mail->Body    = "Terima Kasih kerana mendaftar!
     Sila klik link di bawah untuk mengesahkan email anda.
-    <a href='http://localhost/email_verify.php?email=$patientEmail&code=$v_code'>Verify Now</a>";
+    <a href='http://demomycoviq.ddns.net/email_verify.php?email=$patientEmail&code=$v_code'>Verify Now</a>";
 
     $mail->send();
     return true;
@@ -194,9 +198,9 @@ function patientRegister($data)
 {
   $conn = connection();
 
-  $patientName = htmlspecialchars(ucwords(strtolower($data['patientName'])));
+  $patientName = htmlspecialchars(($data['patientName']));
   $patientICNo = htmlspecialchars($data['patient_icNo']);
-  $patientAddress = htmlspecialchars(ucwords(strtolower($data['patient_address'])));
+  $patientAddress = htmlspecialchars(($data['patient_address']));
   $patientTelNo = htmlspecialchars($data['patient_telNo']);
   $patientEmail = htmlspecialchars(strtolower($data['patientEmail']));
   $patientPassword1 = mysqli_real_escape_string($conn, $data['patientPassword1']);
@@ -397,18 +401,19 @@ function editDetails($data)
   $conn = connection();
 
   $id = $_GET['id'];
-  $patientName = htmlspecialchars($data['patientName']);
+  $patientName = htmlspecialchars(strtoupper($data['patientName']));
   $patientICNo = htmlspecialchars($data['patient_icNo']);
   $patientAddress = htmlspecialchars($data['patient_address']);
   $patientTelNo = htmlspecialchars($data['patient_telNo']);
   //$patientEmail = htmlspecialchars($data['patientEmail']);
-  //$patientProfileImg = htmlspecialchars($data['patient_profileImg']);
+  $patientProfileImg = htmlspecialchars($data['patient_profileImg']);
 
   $query = "UPDATE patient SET
                 patientName = '$patientName',    
                 patient_icNo = '$patientICNo',
                 patient_address = '$patientAddress',
-                patient_telNo = '$patientTelNo'
+                patient_telNo = '$patientTelNo',
+                patient_profileImg = '$patientProfileImg'
             WHERE patient_id = $id";
 
   mysqli_query($conn, $query) or die(mysqli_error($conn));

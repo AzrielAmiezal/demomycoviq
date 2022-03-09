@@ -31,7 +31,7 @@ if (isset($_GET['enter'])) {
   <meta charset="utf-8" />
   <link rel="icon" type="image/x-icon" href="logo.png">
   <title>MYCOVIQ | COVID-19 INDIVIDUAL QUARANTINE</title>
-  <meta name="description" content="Tuts+ Chat Application" />
+  <meta name="description" content="" />
   <link rel="stylesheet" href="style.css" />
 </head>
 

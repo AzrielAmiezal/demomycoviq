@@ -376,30 +376,30 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
             <div class="row">
               <!-- Pie Chart 1 -->
               <div class="col-xl-6 col-lg-7">
-                <div class="card shadow mb-4">
-                  <!-- Card Header - Dropdown -->
-                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <!-- <div class="card shadow mb-4"> -->
+                <!-- Card Header - Dropdown -->
+                <!-- <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Jumlah Kes Covid-19 di Malaysia</h6>
-                  </div>
-                  <!-- Card Body -->
-                  <div class="card-body">
+                  </div> -->
+                <!-- Card Body -->
+                <!-- <div class="card-body">
 
-                  </div>
-                </div>
+                  </div> -->
+                <!-- </div> -->
               </div>
 
               <!-- Pie Chart 2 -->
               <div class="col-xl-6 col-lg-7">
-                <div class="card shadow mb-4">
-                  <!-- Card Header - Dropdown -->
-                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <!-- <div class="card shadow mb-4"> -->
+                <!-- Card Header - Dropdown -->
+                <!-- <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Jumlah Vaksinasi Harian di Malaysia</h6>
-                  </div>
-                  <!-- Card Body -->
-                  <div class="card-body">
+                  </div> -->
+                <!-- Card Body -->
+                <!-- <div class="card-body">
 
-                  </div>
-                </div>
+                  </div> -->
+                <!-- </div> -->
               </div>
             </div>
 

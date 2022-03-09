@@ -14,7 +14,7 @@ if (isset($_POST['update'])) {
 
   if (editProfile($_POST) > 0) {
     echo "<script>
-                alert('Butiran peribadi anda berjaya dikemaskini');
+                alert('Akaun anda berjaya dikemaskini');
                 document.location.href = 'patient_profile.php';
             </script>";
   } else {

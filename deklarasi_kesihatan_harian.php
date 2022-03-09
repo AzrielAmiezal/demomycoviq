@@ -60,7 +60,7 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
-        <a class="nav-link" href="index.php?id=<?= $_SESSION['patient_id']; ?>">
+        <a class="nav-link" href="index.php">
           <i class="fas fa-fw fa-home"></i>
           <span>Utama</span></a>
       </li>
@@ -265,13 +265,13 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                           ?>
                             <?php
                             for ($i = $startDate; $i <= $endDate; $i->modify('+1 day')) :
-                              $date = new DateTime('2022-03-09');
+                              $date = new DateTime();
                               $time1 = $i->format('Y-m-d');
                               $time2 = $date->format('Y-m-d');
-                              // $hour = date('G');
-                              // $minute = date('i');
-                              $hour = 10;
-                              $minute = 00;
+                              $hour = date('G');
+                              $minute = date('i');
+                              // $hour = 10;
+                              // $minute = 00;
                             ?>
                               <tr>
                                 <td><?= $a++; ?></td>

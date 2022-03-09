@@ -33,8 +33,8 @@ $client->setClientId('592618045940-hs0cv3dje56ucconuakc6lhm7f7vghme.apps.googleu
 $client->setClientSecret('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');
 // Enter the Redirect URL
 // $client->setRedirectUri('http://localhost/demomycoviq/patient_login.php');
-// $client->setRedirectUri('http://localhost/patient_login.php');
-$client->setRedirectUri('http://demomycoviq.ddns.net/patient_login.php');
+$client->setRedirectUri('http://localhost/patient_login.php');
+// $client->setRedirectUri('http://demomycoviq.ddns.net/patient_login.php');
 
 // Adding those scopes which we want to get (email & profile Information)
 $client->addScope("email");

@@ -1,31 +1,37 @@
 <?php
 session_start();
 require '../functions.php';
-require '../PHPMailer/PHPMailer.php';
-require '../PHPMailer/Exception.php';
-require '../PHPMailer/SMTP.php';
+// require '../PHPMailer/PHPMailer.php';
+// require '../PHPMailer/Exception.php';
+// require '../PHPMailer/SMTP.php';
+
+
+$id = $_GET['patient'];
 
 //check whether the submit button is click or not
 if (isset($_POST['submit'])) {
 
   //check whether data has been added or not
-  if (addIsolation($_POST) > 0) {
+  if (editIsolation($_POST) > 0) {
     echo "<script>
-            alert('Maklumat berjaya ditetapkan. Email notifikasi deklarasi harian kendiri telah dihantar kepada pesakit');
-            document.location.href = 'admin_index.php';
-            </script>";
+            alert('Maklumat berjaya dikemaskini. Email notifikasi telah dihantar kepada pesakit');
+            document.location.href = 'view_patient.php?patient=$id';
+          </script>";
   } else {
     echo "<script>
             alert('Failed to submit! Maybe occur some error');
-            document.location.href = 'admin_index.php';
-            </script>";
+              document.location.href = 'view_patient.php?patient=" . $id .
+      "</script>";
   }
 }
 
 $conn = connection();
-$id = $_GET['patient'];
-$patient = query("SELECT * FROM patient WHERE patient_id = '$id'")[0];
-// $rows = mysqli_fetch_assoc($result);
+
+$patient = query("SELECT patient.*,deklarasi_harian.* FROM patient
+                                JOIN deklarasi_harian
+                                ON deklarasi_harian.patient_id = patient.patient_id
+                                WHERE patient.patient_id = '$id'")[0];
+//$rows = mysqli_fetch_assoc($result);
 
 ?>
 
@@ -104,7 +110,7 @@ $patient = query("SELECT * FROM patient WHERE patient_id = '$id'")[0];
           </button>
 
           <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-            <h4>Tetapan Kuarantin</h4>
+            <h4>Kemaskini Tetapan Kuarantin</h4>
           </div>
 
           <!-- Topbar Navbar -->
@@ -173,6 +179,8 @@ $patient = query("SELECT * FROM patient WHERE patient_id = '$id'")[0];
                   <div class="card-body">
                     <div class="form-group">
                       <form method="POST" action="">
+                        <input type="hidden" name="patient_id" id="patient_id" value="<?= $patient['patient_id']; ?>">
+                        <!-- For email -->
                         <input type="hidden" name="patientName" id="patientName" value="<?= $patient['patientName']; ?>">
                         <input type="hidden" name="patient_icNo" id="patient_icNo" value="<?= $patient['patient_icNo']; ?>">
                         <input type="hidden" name="patientEmail" id="patientEmail" value="<?= $patient['patientEmail']; ?>">
@@ -189,10 +197,14 @@ $patient = query("SELECT * FROM patient WHERE patient_id = '$id'")[0];
                             <tr>
                               <th scope="col">TAHAP JANGKITAN COVID-19</th>
                               <td>
-                                <select class="form-control form-control-sm" name="covidStage" id="covidStage" required>
+                                <select class="custom-select custom-select-sm" name="covidStage" id="covidStage" required>
                                   <option value="">Sila Pilih</option>
-                                  <option value="1 - Tidak menunjukkan sebarang gejala">1 - Tidak menunjukkan sebarang gejala</option>
-                                  <option value="2 - Bergejala ringan, tiada radang paru-paru">2 - Bergejala ringan, tiada radang paru-paru</option>
+                                  <option value="1 - Tidak menunjukkan sebarang gejala" <?php if ($patient['covidStage'] == '1 - Tidak menunjukkan sebarang gejala') {
+                                                                                          echo 'selected';
+                                                                                        } ?>>1 - Tidak menunjukkan sebarang gejala</option>
+                                  <option value="2 - Bergejala ringan, tiada radang paru-paru" <?php if ($patient['covidStage'] == '2 - Bergejala ringan, tiada radang paru-paru') {
+                                                                                                  echo 'selected';
+                                                                                                } ?>>2 - Bergejala ringan, tiada radang paru-paru</option>
                                   <!-- <option value="3 - Bergejala, mengalami radang paru-paru">3 - Bergejala, mengalami radang paru-paru</option> -->
                                 </select>
                               </td>
@@ -200,28 +212,31 @@ $patient = query("SELECT * FROM patient WHERE patient_id = '$id'")[0];
                             <tr>
                               <th scope="col">TARIKH PESAKIT MULA KUARANTIN</th>
                               <td>
-                                <input class="form-control form-control-sm" type="date" name="tarikh_mula" id="tarikh_mula" required>
+                                <input class="form-control form-control-sm" type="date" name="tarikh_mula" id="tarikh_mula" value="<?= $patient['tarikh_mula']; ?>" required>
                               </td>
                             </tr>
                             <tr>
                               <th scope="col">TARIKH PESAKIT TAMAT KUARANTIN</th>
                               <td>
-                                <input class="form-control form-control-sm" type="date" name="tarikh_tamat" id="tarikh_tamat" required>
+                                <input class="form-control form-control-sm" type="date" name="tarikh_tamat" id="tarikh_tamat" value="<?= $patient['tarikh_tamat']; ?>" required>
                               </td>
                             </tr>
                             <tr>
                               <th scope="col">STATUS</th>
                               <td>
-                                <select class="form-control form-control-sm" name="status_kuarantin" id="status_kuarantin" required>
+                                <select class="custom-select custom-select-sm" name="status_kuarantin" id="status_kuarantin" required>
                                   <option value="">Sila Pilih</option>
-                                  <option value="Sedang dalam pemantauan">Sedang dalam pemantauan</option>
-                                  <option value="Tamat Kuarantin">Tamat Kuarantin</option>
+                                  <option value="Sedang dalam pemantauan" <?php if ($patient['status_kuarantin'] == 'Sedang dalam pemantauan') {
+                                                                            echo 'selected';
+                                                                          } ?>>Sedang dalam pemantauan</option>
+                                  <option value="Tamat Kuarantin" <?php if ($patient['status_kuarantin'] == 'Tamat Kuarantin') {
+                                                                    echo 'selected';
+                                                                  } ?>>Tamat Kuarantin</option>
                                 </select>
                               </td>
                             </tr>
                           </table>
                           <div class="text-center">
-                            <button class="btn btn-light" onclick="history.back()"><b>Batal</b></button>
                             <button class="btn btn-light" type="submit" name="submit" onclick="return confirm('Adakah anda pasti tentang maklumat yang dimasukkan?')"><b>Simpan</b></button>
                           </div>
                         </div>

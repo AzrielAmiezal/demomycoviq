@@ -518,8 +518,9 @@ function adminLogin($data)
     if (password_verify($adminPassword, $row['admin_password'])) {
       //set session
       $_SESSION['admin_login'] = true;
+      $_SESSION['admin_id'] = $row['admin_id'];
       $_SESSION['admin_name'] = $row['admin_name'];
-      header("Location: index.php");
+      header("Location: admin_index.php");
     }
   }
   return [
@@ -553,8 +554,7 @@ function sendMailIsolation($patientEmail, $patientName, $patient_icNo)
     $mail->Body    = 'Hi ' . $patientName . ',<br/><br/>
     Sila semak butiran deklarasi harian kendiri bagi <b>NO K/P ' . $patient_icNo . '</b> di MYCOVIQ <br/><br/>
     <b>PASTIKAN ANDA KEMASKINI KESEMUA DEKLARASI HARIAN KENDIRI MENGIKUT HARI, TARIKH DAN SESI YANG DITETAPKAN SEHINGGA TAMAT TEMPOH KUARANTIN KENDIRI.</b><br/><br/>
-    Terima Kasih.<br/><br/>
-    <b>SALAM WASALAM.</b>';
+    Terima Kasih.<br/><br/>';
 
     $mail->send();
     return true;
@@ -583,6 +583,32 @@ function addIsolation($data)
               (null, " . $_GET['patient'] . ", '$covidStage','$tarikhMula','$tarikhTamat','$status') 
               ";
   sendMailIsolation($patientEmail, $patientName, $patientICNo);
+  mysqli_query($conn, $query) or die(mysqli_error($conn));
+  return mysqli_affected_rows($conn);
+}
+
+function editIsolation($data)
+{
+  $conn = connection();
+
+  //For email purpose
+  // $patientName = $data['patientName'];
+  // $patientICNo = $data['patient_icNo'];
+  // $patientEmail = $data['patientEmail'];
+
+  $id = $data['patient_id'];
+  $covidStage = htmlspecialchars($data['covidStage']);
+  $tarikhMula = date('Y-m-d', strtotime($data['tarikh_mula']));
+  $tarikhTamat = date('Y-m-d', strtotime($data['tarikh_tamat']));
+  $status = htmlspecialchars($data['status_kuarantin']);
+
+  $query = "UPDATE deklarasi_harian SET
+              covidStage= '$covidStage',
+              tarikh_mula = '$tarikhMula',
+              tarikh_tamat = '$tarikhTamat',
+              status_kuarantin = '$status'
+            WHERE patient_id = $id";
+
   mysqli_query($conn, $query) or die(mysqli_error($conn));
   return mysqli_affected_rows($conn);
 }

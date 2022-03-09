@@ -1,31 +1,18 @@
 <?php
 session_start();
+date_default_timezone_set('Asia/Kuala_Lumpur');
 require '../functions.php';
-require '../PHPMailer/PHPMailer.php';
-require '../PHPMailer/Exception.php';
-require '../PHPMailer/SMTP.php';
 
-//check whether the submit button is click or not
-if (isset($_POST['submit'])) {
 
-  //check whether data has been added or not
-  if (addIsolation($_POST) > 0) {
-    echo "<script>
-            alert('Maklumat berjaya ditetapkan. Email notifikasi deklarasi harian kendiri telah dihantar kepada pesakit');
-            document.location.href = 'admin_index.php';
-            </script>";
-  } else {
-    echo "<script>
-            alert('Failed to submit! Maybe occur some error');
-            document.location.href = 'admin_index.php';
-            </script>";
-  }
+//check whether the user is login or not
+if (!isset($_SESSION['admin_login'])) {
+  header("Location: admin_login.php");
+  exit;
 }
 
-$conn = connection();
-$id = $_GET['patient'];
-$patient = query("SELECT * FROM patient WHERE patient_id = '$id'")[0];
-// $rows = mysqli_fetch_assoc($result);
+
+$id = $_SESSION['admin_id'];
+$patientList = query("SELECT * FROM patient");
 
 ?>
 
@@ -85,6 +72,14 @@ $patient = query("SELECT * FROM patient WHERE patient_id = '$id'")[0];
         Menu
       </div>
 
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-fw fa-user-cog"></i>
+          <span>Daftar Admin</span></a>
+      </li>
+
+
 
     </ul>
     <!-- End of Sidebar -->
@@ -104,7 +99,7 @@ $patient = query("SELECT * FROM patient WHERE patient_id = '$id'")[0];
           </button>
 
           <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-            <h4>Tetapan Kuarantin</h4>
+            <h4>Utama</h4>
           </div>
 
           <!-- Topbar Navbar -->
@@ -118,7 +113,6 @@ $patient = query("SELECT * FROM patient WHERE patient_id = '$id'")[0];
                 <?php
                 // To fetch picture from phpmyadmin
                 $conn = connection();
-                $id = $_SESSION['admin_id'];
                 $admin = mysqli_query($conn, "SELECT * FROM `admin` WHERE admin_id = '$id'");
                 $rows = mysqli_fetch_array($admin);
 
@@ -160,78 +154,108 @@ $patient = query("SELECT * FROM patient WHERE patient_id = '$id'")[0];
         <form method="POST" action="">
           <!-- Begin Page Content -->
           <div class="container-fluid">
+            <!-- Page Heading -->
+            <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
+              <h4 class="h5 mb-0 text-gray-800">Paparan Deklarasi Kesihatan Harian pada <?= date('d M Y h:i:s A'); ?></h4>
+            </div> -->
+
+            <!-- Content Row -->
+
+            <div class="row">
+
+            </div>
 
             <!-- Content Row -->
             <div class="row">
+
               <!-- Content Column -->
               <div class="col mb-2">
                 <!-- Project Card Example -->
                 <div class="card shadow mb-4">
                   <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">TETAPAN STATUS DAN TARIKH KUARANTIN</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">SENARAI PESAKIT YANG MENDAFTAR</h6>
                   </div>
                   <div class="card-body">
-                    <div class="form-group">
-                      <form method="POST" action="">
-                        <input type="hidden" name="patientName" id="patientName" value="<?= $patient['patientName']; ?>">
-                        <input type="hidden" name="patient_icNo" id="patient_icNo" value="<?= $patient['patient_icNo']; ?>">
-                        <input type="hidden" name="patientEmail" id="patientEmail" value="<?= $patient['patientEmail']; ?>">
-                        <div class="table-responsive">
-                          <table class="table">
+                    <div class="table-responsive col-lg-12">
+                      <table class="table table-striped">
+                        <thead class="table-dark" align="center">
+                          <tr>
+                            <th scope="col">BIL.</th>
+                            <th scope="col">NAMA PESAKIT</th>
+                            <th scope="col">NO K/P</th>
+                            <th scope="col">TELEFON</th>
+                            <th scope="col">EMAIL PESAKIT</th>
+                            <th scope="col">TINDAKAN</th>
+                          </tr>
+                        </thead>
+                        <?php if (empty($patientList)) : ?>
+                          <tr>
+                            <td colspan="7">
+                              <p style="color: red; font-style:italic; text-align:center;">Tiada Maklumat</p>
+                            </td>
+                          </tr>
+                        <?php endif; ?>
+                        <tbody align="center">
+                          <?php
+                          $i = 1;
+                          foreach ($patientList as $p) : ?>
+
                             <tr>
-                              <th scope="col">NAMA PESAKIT</th>
-                              <td><?= $patient['patientName']; ?></td>
-                            </tr>
-                            <tr>
-                              <th scope="col">NO K/P</th>
-                              <td><?= $patient['patient_icNo']; ?></td>
-                            </tr>
-                            <tr>
-                              <th scope="col">TAHAP JANGKITAN COVID-19</th>
+                              <td><?= $i++; ?></td>
+                              <td><?= $p['patientName']; ?></td>
+                              <td><?= $p['patient_icNo']; ?></td>
+                              <td>+60 <?= $p['patient_telNo']; ?></td>
+                              <td><?= $p['patientEmail']; ?></td>
                               <td>
-                                <select class="form-control form-control-sm" name="covidStage" id="covidStage" required>
-                                  <option value="">Sila Pilih</option>
-                                  <option value="1 - Tidak menunjukkan sebarang gejala">1 - Tidak menunjukkan sebarang gejala</option>
-                                  <option value="2 - Bergejala ringan, tiada radang paru-paru">2 - Bergejala ringan, tiada radang paru-paru</option>
-                                  <!-- <option value="3 - Bergejala, mengalami radang paru-paru">3 - Bergejala, mengalami radang paru-paru</option> -->
-                                </select>
+                                <a href="patient_quarantine.php?patient=<?= $p['patient_id']; ?>" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Set Status & Tempoh Kuarantin"><i class="fas fa-calendar-plus"></i></a> |
+                                <a href="edit_patient_quarantine.php?patient=<?= $p['patient_id']; ?>" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini Status & Tempoh Kuarantin"><i class="fas fa-edit"></i></a> |
+                                <a href="view_patient.php?patient=<?= $p['patient_id']; ?>" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Maklumat Pesakit"><i class="fas fa-address-card"></i></a> |
+                                <a href="admin_chat.php?id=<?= $p['patient_id']; ?>&enter=true" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Chat Pesakit"><i class="fas fa-comment"></i></a>
                               </td>
                             </tr>
-                            <tr>
-                              <th scope="col">TARIKH PESAKIT MULA KUARANTIN</th>
-                              <td>
-                                <input class="form-control form-control-sm" type="date" name="tarikh_mula" id="tarikh_mula" required>
-                              </td>
-                            </tr>
-                            <tr>
-                              <th scope="col">TARIKH PESAKIT TAMAT KUARANTIN</th>
-                              <td>
-                                <input class="form-control form-control-sm" type="date" name="tarikh_tamat" id="tarikh_tamat" required>
-                              </td>
-                            </tr>
-                            <tr>
-                              <th scope="col">STATUS</th>
-                              <td>
-                                <select class="form-control form-control-sm" name="status_kuarantin" id="status_kuarantin" required>
-                                  <option value="">Sila Pilih</option>
-                                  <option value="Sedang dalam pemantauan">Sedang dalam pemantauan</option>
-                                  <option value="Tamat Kuarantin">Tamat Kuarantin</option>
-                                </select>
-                              </td>
-                            </tr>
-                          </table>
-                          <div class="text-center">
-                            <button class="btn btn-light" onclick="history.back()"><b>Batal</b></button>
-                            <button class="btn btn-light" type="submit" name="submit" onclick="return confirm('Adakah anda pasti tentang maklumat yang dimasukkan?')"><b>Simpan</b></button>
-                          </div>
-                        </div>
-                      </form>
+
+                          <?php endforeach; ?>
+                        </tbody>
+                      </table>
                     </div>
+
                   </div>
                 </div>
               </div>
 
             </div>
+
+            <!-- Content Row for PIE CHARTS -->
+            <div class="row">
+              <!-- Pie Chart 1 -->
+              <div class="col-xl-6 col-lg-7">
+                <!-- <div class="card shadow mb-4"> -->
+                <!-- Card Header - Dropdown -->
+                <!-- <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Jumlah Kes Covid-19 di Malaysia</h6>
+                  </div> -->
+                <!-- Card Body -->
+                <!-- <div class="card-body">
+
+                  </div> -->
+                <!-- </div> -->
+              </div>
+
+              <!-- Pie Chart 2 -->
+              <div class="col-xl-6 col-lg-7">
+                <!-- <div class="card shadow mb-4"> -->
+                <!-- Card Header - Dropdown -->
+                <!-- <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Jumlah Vaksinasi Harian di Malaysia</h6>
+                  </div> -->
+                <!-- Card Body -->
+                <!-- <div class="card-body">
+
+                  </div> -->
+                <!-- </div> -->
+              </div>
+            </div>
+
           </div>
           <!-- /.container-fluid -->
         </form>

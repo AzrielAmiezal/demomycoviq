@@ -1,17 +1,16 @@
 <?php
-date_default_timezone_set('Asia/Kuala_Lumpur');
-require 'functions.php';
 session_start();
-
-//check whether the user is login or not
-if (!isset($_SESSION['login'])) {
-  header("Location: patient_login.php");
-  exit;
-}
+date_default_timezone_set('Asia/Kuala_Lumpur');
+require '../functions.php';
 
 $conn = connection();
-$id = $_SESSION['login_id'];
-$health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperature.*,sesi_kemaskini_kesihatan.*,deklarasi_harian.* 
+$patient_id = $_GET['patient'];
+
+$patient = query("SELECT * FROM patient WHERE patient_id = '$patient_id' ")[0];
+
+$quarantine = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_id' ");
+
+$patientData = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperature.*,sesi_kemaskini_kesihatan.*,deklarasi_harian.* 
                         FROM health_status 
                           JOIN spo2 
                             ON health_status.spo2_id = spo2.spo2_id 
@@ -25,12 +24,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
                             ON health_status.sesi_id = sesi_kemaskini_kesihatan.sesi_id
                           JOIN deklarasi_harian
                             ON health_status.patient_id = deklarasi_harian.patient_id
-                          WHERE health_status.patient_id = '$id'");
-
-// echo "patient id =" . $_SESSION['patient_id'];
-// echo "google id =" . $_SESSION['google_id'];
-
-
+                          WHERE health_status.patient_id = '$patient_id'");
 ?>
 
 <!DOCTYPE html>
@@ -42,14 +36,14 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <link rel="icon" type="image/x-icon" href="logo1.png">
+  <link rel="icon" type="image/x-icon" href="../logo.png">
   <title>MYCOVIQ | COVID-19 INDIVIDUAL QUARANTINE</title>
 
   <!-- Custom fonts for this template-->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <!-- Custom styles for this template-->
-  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 
@@ -60,10 +54,10 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
 
 
     <!-- Sidebar -->
-    <ul class="navbar-nav sidebar sidebar-dark accordion toggled" id="accordionSidebar" style="background-color: #73B00B;">
+    <ul class="navbar-nav sidebar sidebar-dark accordion toggled" id="accordionSidebar" style="background-color: #FFA500;">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin_index.php">
         <!-- <div class="sidebar-brand-icon rotate-n-15"> -->
         <!-- <i class="fas fa-laugh-wink"></i> -->
         MYCOVIQ
@@ -76,7 +70,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-        <a class="nav-link" href="index.php">
+        <a class="nav-link" href="admin_index.php">
           <i class="fas fa-fw fa-home"></i>
           <span>Utama</span></a>
       </li>
@@ -89,33 +83,15 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
         Menu
       </div>
 
-      <!-- Nav Item - Deklarasi Kendiri-->
+      <!-- Nav Item - Dashboard -->
       <li class="nav-item">
-        <a class="nav-link" href="deklarasi_kesihatan_harian.php?id=<?= $_SESSION['patient_id']; ?>">
-          <i class="fas fa-fw fa-file-medical"></i>
-          <span>Deklarasi Kendiri</span></a>
+        <a class="nav-link" href="#">
+          <i class="fas fa-fw fa-user-cog"></i>
+          <span>Daftar Admin</span></a>
       </li>
 
-      <!-- Nav Item - Chat-->
-      <li class="nav-item">
-        <a class="nav-link" href="patient_chat.php?id=<?= $_SESSION['patient_id']; ?>&enter=true">
-          <i class="fas fa-fw fa-comments"></i>
-          <span>Chat kami</span></a>
-      </li>
 
-      <!-- Nav Item - Profile -->
-      <!-- <li class="nav-item">
-        <a class="nav-link" href="patient_profile.php?id=<?= $_SESSION['patient_id']; ?>">
-          <i class="fas fa-fw fa-user"></i>
-          <span>Akaun Saya</span></a>
-      </li> -->
 
-      <!-- Nav Item - FAQ -->
-      <!-- <li class="nav-item">
-        <a class="nav-link" href="patient_faq.php">
-          <i class="fas fa-fw fa-question-circle"></i>
-          <span>FAQ</span></a>
-      </li> -->
     </ul>
     <!-- End of Sidebar -->
 
@@ -134,7 +110,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
           </button>
 
           <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-            <h4>DASHBOARD</h4>
+            <h4>Maklumat Pesakit</h4>
           </div>
 
           <!-- Topbar Navbar -->
@@ -148,20 +124,21 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
                 <?php
                 // To fetch picture from phpmyadmin
                 $conn = connection();
-                $patient = mysqli_query($conn, "SELECT * FROM patient WHERE patient_id = '$id'");
-                $rows = mysqli_fetch_array($patient);
+                $id = $_SESSION['admin_id'];
+                $admin = mysqli_query($conn, "SELECT * FROM `admin` WHERE admin_id = '$id'");
+                $rows = mysqli_fetch_array($admin);
 
                 ?>
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= strtoupper($rows['patientName']);  ?></span>
-                <img class="img-profile rounded-circle" src="img/<?= $rows['patient_profileImg'] ?>">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= strtoupper($rows['admin_name']);  ?></span>
+                <img class="img-profile rounded-circle" src="../img/<?= $rows['admin_profileImg'] ?>">
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="patient_profile.php?id=<?= $_SESSION['patient_id']; ?>">
+                <a class="dropdown-item" href="admin_profile.php?id=<?= $_SESSION['admin_id']; ?>">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Akaun Saya
                 </a>
-                <a class="dropdown-item" href="changePassword.php?id=<?= $_SESSION['patient_id']; ?>">
+                <a class="dropdown-item" href="admin_changePassword.php?id=<?= $_SESSION['admin_id']; ?>">
                   <i class="fas fa-cog fa-sm fa-fw mr-2 text-gray-400"></i>
                   Tukar kata laluan
                 </a>
@@ -190,19 +167,121 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
           <!-- Begin Page Content -->
           <div class="container-fluid">
             <!-- Page Heading -->
-            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
               <h4 class="h5 mb-0 text-gray-800">Paparan Deklarasi Kesihatan Harian pada <?= date('d M Y h:i:s A'); ?></h4>
-            </div>
+            </div> -->
 
             <!-- Content Row -->
 
             <div class="row">
 
+            </div>
+
+            <!-- Content Row -->
+            <div class="row">
+              <!-- Content Column -->
+              <div class="col mb-2">
+                <!-- Project Card Example -->
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3 text-center">
+                    <h6 class="m-0 font-weight-bold text-primary">MAKLUMAT PESAKIT</h6>
+                  </div>
+                  <div class="card-body">
+
+                    <div class="text-center">
+                      <img class="img-thumbnail img-profile rounded-circle border border-dark" src="../img/<?= $patient['patient_profileImg']; ?>" width="25%" style="width: 10rem; height: 10rem;" draggable="false">
+                      <br /><br />
+                    </div>
+
+                    <div class="table-responsive col-lg-12">
+                      <!-- Table Patient Info -->
+                      <table class="table">
+                        <tr>
+                          <td rowspan="4" align="center"></td>
+                        </tr>
+                        <tr>
+                          <th>Nama Pengguna</th>
+                          <td><?= $patient['patientName']; ?></td>
+                          <th>No Kad Pengenalan / Passport</th>
+                          <td><?= $patient['patient_icNo']; ?></td>
+                        </tr>
+                        <tr>
+                          <th>No H/P</th>
+                          <td>+60 <?= $patient['patient_telNo']; ?></td>
+                          <th>Email</th>
+                          <td><?= $patient['patientEmail']; ?></td>
+                        </tr>
+                        <tr>
+                          <th>Alamat</th>
+                          <td colspan="4"><?= $patient['patient_address']; ?></td>
+                        </tr>
+                      </table>
+                      <!-- End of table patient info -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Content Row -->
+            <div class="row">
+
+              <!-- Content Column -->
+              <div class="col mb-2">
+                <!-- Project Card Example -->
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3 text-center">
+                    <h6 class="m-0 font-weight-bold text-primary">MAKLUMAT KUARANTIN DAN STATUS KESIHATAN</h6>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive col-lg-12">
+                      <!-- Quarantine Information -->
+                      <table class="table">
+                        <tr align="center">
+                          <th>Tahap Jangkitan COVID-19</th>
+                          <th>Tempoh Kuarantin</th>
+                          <th>Tarikh Mula</th>
+                          <th>Tarikh Tamat</th>
+                          <th>Status</th>
+                        </tr>
+
+                        <?php if (empty($quarantine)) : ?>
+                          <tr>
+                            <td colspan="5">
+                              <p style="color: red; text-align:center;">Tiada Maklumat</p>
+                            </td>
+                          </tr>
+                        <?php endif; ?>
+
+                        <?php
+
+                        foreach ($quarantine as $q) :
+                          //Calculate total days between start and end date
+                          $diff = strtotime($q['tarikh_tamat']) - strtotime($q['tarikh_mula']);
+                        ?>
+                          <tr align="center">
+                            <td><?= $q['covidStage']; ?></td>
+                            <td><?= round($diff / 86400) + 1; ?> Hari</td>
+                            <td><?= date('d M Y', strtotime($q['tarikh_mula'])); ?></td>
+                            <td><?= date('d M Y', strtotime($q['tarikh_tamat'])); ?></td>
+                            <td><?= $q['status_kuarantin']; ?></td>
+                          </tr>
+                        <?php endforeach; ?>
+                      </table>
+                      <!-- End of quarantine info table -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row">
               <!-- Area Chart 1 -->
               <?php
               //echo mysqli_num_rows($health_status);
-              foreach ($health_status as $s) {
-                if (mysqli_num_rows($health_status) > 0) {
+              foreach ($patientData as $s) {
+                if (mysqli_num_rows($patientData) > 0) {
                   $tarikh[] = $s['tarikh_kemaskini'];
                   $spo2[] = $s['spo2_level'];
                 } else {
@@ -221,7 +300,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
                   <div class="card-body">
                     <div class="chart-area">
                       <?php
-                      if (mysqli_num_rows($health_status) < 1) {
+                      if (mysqli_num_rows($patientData) < 1) {
                         echo '<p class="d-flex justify-content-center pt-5" style="color: red; text-align:center;">Tiada Maklumat</p>';
                       } else { ?>
                         <canvas id="spo2_chart"></canvas>
@@ -234,7 +313,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
 
               <!-- Area Chart 2 -->
               <?php
-              foreach ($health_status as $t) {
+              foreach ($patientData as $t) {
                 $tarikh2[] = $t['tarikh_kemaskini'];
                 $temperature[] = $t['temperature_level'];
               }
@@ -249,7 +328,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
                   <div class="card-body">
                     <div class="chart-area">
                       <?php
-                      if (mysqli_num_rows($health_status) < 1) {
+                      if (mysqli_num_rows($patientData) < 1) {
                         echo '<p class="d-flex justify-content-center pt-5" style="color: red; text-align:center;">Tiada Maklumat</p>';
                       } else { ?>
                         <canvas id="temperature_chart"></canvas>
@@ -262,9 +341,10 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
 
             </div>
 
+            <!-- End of charts row -->
+
             <!-- Content Row -->
             <div class="row">
-
               <!-- Content Column -->
               <div class="col mb-2">
                 <!-- Project Card Example -->
@@ -289,7 +369,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
                             <th scope="col">Hilang Deria Bau</th>
                           </tr>
                         </thead>
-                        <?php if (mysqli_num_rows($health_status) < 1) : ?>
+                        <?php if (mysqli_num_rows($patientData) < 1) : ?>
                           <tr>
                             <td colspan="10">
                               <p style="color: red; text-align:center;">Tiada Maklumat</p>
@@ -298,7 +378,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
                         <?php endif; ?>
                         <tbody align="center">
                           <?php $i = 1;
-                          foreach ($health_status as $hs) : ?>
+                          foreach ($patientData as $hs) : ?>
                             <tr>
                               <td><?= $hs['hari_kemaskini']; ?> <?= $hs['tarikh_kemaskini']; ?> <?= $hs['masa_kemaskini']; ?></td>
                               <td><?= $hs['sesi_No']; ?></td>
@@ -319,40 +399,8 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
                   </div>
                 </div>
               </div>
-
             </div>
-
-            <!-- Content Row for PIE CHARTS -->
-            <div class="row">
-              <!-- Pie Chart 1 -->
-              <div class="col-xl-6 col-lg-7">
-                <!-- <div class="card shadow mb-4"> -->
-                <!-- Card Header - Dropdown -->
-                <!-- <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Jumlah Kes Covid-19 di Malaysia</h6>
-                  </div> -->
-                <!-- Card Body -->
-                <!-- <div class="card-body">
-
-                  </div> -->
-                <!-- </div> -->
-              </div>
-
-              <!-- Pie Chart 2 -->
-              <div class="col-xl-6 col-lg-7">
-                <!-- <div class="card shadow mb-4"> -->
-                <!-- Card Header - Dropdown -->
-                <!-- <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Jumlah Vaksinasi Harian di Malaysia</h6>
-                  </div> -->
-                <!-- Card Body -->
-                <!-- <div class="card-body">
-
-                  </div> -->
-                <!-- </div> -->
-              </div>
-            </div>
-
+            <!-- End of health info -->
           </div>
           <!-- /.container-fluid -->
         </form>
@@ -392,29 +440,30 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
         </div>
         <div class="modal-body">Pilih "Logout" jika anda memilih untuk tamatkan sesi.</div>
         <div class="modal-footer">
-          <a class="btn btn-danger" href="logout.php?id=<?= $_SESSION['patient_id']; ?>">Logout</a>
+          <a class="btn btn-danger" href="admin_logout.php?id=<?= $_SESSION['admin_id']; ?>">Log Keluar</a>
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
           <!-- <a class="btn btn-primary" href="login.html">Logout</a> -->
         </div>
       </div>
     </div>
   </div>
+
   <!-- Bootstrap core JavaScript-->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../vendor/jquery/jquery.min.js"></script>
+  <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Core plugin JavaScript-->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
   <!-- Custom scripts for all pages-->
-  <script src="js/sb-admin-2.min.js"></script>
+  <script src="../js/sb-admin-2.min.js"></script>
 
   <!-- Page level plugins -->
-  <script src="vendor/chart.js/Chart.min.js"></script>
+  <script src="../vendor/chart.js/Chart.min.js"></script>
 
   <!-- Page level custom scripts -->
-  <!-- <script src="js/demo/chart-area-demo.js"></script> -->
-  <script src="js/demo/chart-pie-demo.js"></script>
+  <!-- <script src="../js/demo/chart-area-demo.js"></script>
+  <script src="../js/demo/chart-pie-demo.js"></script> -->
 
   <script type="text/javascript">
     // Set new default font family and font color to mimic Bootstrap's default styling
@@ -625,6 +674,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
       }
     });
   </script>
+
 </body>
 
 </html>

@@ -19,5 +19,5 @@ if (ini_get("session.use_cookies")) {
 }
 
 $_SESSION['admin_login'] = false;
-header("Location: patient_login.php");
+header("Location: admin_login.php");
 exit();

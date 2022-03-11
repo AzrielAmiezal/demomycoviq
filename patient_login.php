@@ -75,7 +75,7 @@ if (isset($_GET['code'])) :
             //for graph
             $_SESSION['patient_id'] = $row['patient_id'];
             $_SESSION['google_id'] = $row['google_id'];
-            header('Location: index.php?id=' . $_SESSION['login_id']);
+            header('Location: index.php');
             exit;
         } else {
 
@@ -125,6 +125,7 @@ else :
 
         <!-- Custom styles for this template-->
         <link href="css/sb-admin-2.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" />
 
     </head>
 
@@ -156,12 +157,12 @@ else :
                                                 <input type="text" class="form-control form-control-user" name="patientEmail" id="patientEmail" autocomplete="off" placeholder="Masukkan Email atau NO IC" required>
                                             </div>
                                             <div class="form-group">
-                                                <input type="password" class="form-control form-control-user" name="patientPassword" id="myInput" placeholder="Masukkan Kata Laluan">
+                                                <input type="password" class="form-control form-control-user" name="patientPassword" id="myInput" placeholder="Masukkan Kata Laluan" required>
                                             </div>
                                             <div class="form-group">
                                                 <div class="custom-control custom-checkbox small">
                                                     <input type="checkbox" class="custom-control-input" id="customCheck" onclick="myFunction()">
-                                                    <label class="custom-control-label" for="customCheck">Show Password</label>
+                                                    <label class="custom-control-label" for="customCheck">Lihat Kata Laluan</label>
                                                 </div>
                                             </div>
                                             <button type="submit" class="btn btn-primary btn-user btn-block" name="login">Login with Password</button>
@@ -174,9 +175,9 @@ else :
                                             </a> -->
 
                                         <hr>
-                                        <!-- <div class="text-center">
-                                            <a class="small" href="forgot-password.html">Lupa Kata Laluan?</a>
-                                        </div> -->
+                                        <div class="text-center">
+                                            <a class="small" href="email_forgot_password.php">Lupa Kata Laluan?</a>
+                                        </div>
                                         <div class="text-center">
                                             <a class="small" href="patient_register.php">Daftar Akaun!</a>
                                         </div>

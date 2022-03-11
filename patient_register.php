@@ -19,7 +19,7 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
         } else {
             echo "<script>
                 alert('Something went wrong. Please try again later.');
-                document.location.href = 'patient_login.php';
+                document.location.href = 'patient_register.php';
             </script>";
         }
     }
@@ -47,6 +47,7 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" />
 
 </head>
 
@@ -64,34 +65,42 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4"><b>Daftar Akaun</b></h1>
                             </div>
-                            <form class="user" action="" method="POST">
+                            <form class="user" action="" method="POST" id="captcha_form">
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-user" name="patientName" id="patientName" autocomplete="off" placeholder="Nama Penuh" required style="text-transform:uppercase">
+
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-user" name="patient_icNo" id="patient_icNo" autocomplete="off" placeholder="No IC (tanpa '-' / space)" required style="text-transform:uppercase">
+                                    <input type="text" class="form-control form-control-user" name="patient_icNo" id="patient_icNo" autocomplete="off" placeholder="No K/P (tanpa '-' / space)" required style="text-transform:uppercase">
+
                                 </div>
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-user" name="patient_address" id="patient_address" autocomplete="off" placeholder="Alamat Tetap" required style="text-transform:uppercase">
+
                                 </div>
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-user" name="patient_telNo" id="patient_telNo" autocomplete="off" placeholder="No Telefon" required style="text-transform:uppercase">
+
                                 </div>
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-user" name="patientEmail" id="patientEmail" autocomplete="off" placeholder="EMAIL" required>
+
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="password" class="form-control form-control-user" name="patientPassword1" autocomplete="off" placeholder="KATA LALUAN" required>
+
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="password" class="form-control form-control-user" name="patientPassword2" autocomplete="off" placeholder="SAHKAN KATA LALUAN" required>
+
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="g-recaptcha" data-sitekey="6Ldl_HYeAAAAAEUuybZkVB5pWBO2NURKUJo6fqeN"></div>
+                                    <span style="color: red;">Sila klik pada captcha.</span>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-user btn-block" name="register">Daftar akaun</button>
+                                <button type="submit" class="btn btn-primary btn-user btn-block" name="register" onclick="return confirm('Adakah anda pasti tentang maklumat yang dimasukkan?')" id="register">Daftar akaun</button>
                             </form>
                             <hr>
                             <div class="text-center">
@@ -116,7 +125,6 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
 
     <!-- Google Captcha API -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
 </body>
 
 <footer align="center">

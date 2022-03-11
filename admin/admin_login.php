@@ -26,7 +26,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
    <meta name="description" content="">
    <meta name="theme-color" content="#FFFFFF">
-   <link rel="icon" type="image/x-icon" href="logo.png">
+   <link rel="icon" type="image/x-icon" href="../logo.png">
    <link rel="manifest" href="manifest.json">
    <link rel="apple-touch-icon" href="logo192.png">
    <title>MYCOVIQ | COVID-19 INDIVIDUAL QUARANTINE</title>
@@ -37,6 +37,7 @@
 
    <!-- Custom styles for this template-->
    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" />
 
  </head>
 

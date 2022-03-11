@@ -9,6 +9,10 @@ if (!isset($_SESSION['login'])) {
   exit;
 }
 
+// API COVID-19 CASE
+$global = file_get_contents("https://api.covid19api.com/summary");
+$global_cases = json_decode($global, true);
+
 $conn = connection();
 $id = $_SESSION['login_id'];
 $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperature.*,sesi_kemaskini_kesihatan.*,deklarasi_harian.* 
@@ -42,7 +46,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <link rel="icon" type="image/x-icon" href="logo1.png">
+  <link rel="icon" type="image/x-icon" href="logo.png">
   <title>MYCOVIQ | COVID-19 INDIVIDUAL QUARANTINE</title>
 
   <!-- Custom fonts for this template-->
@@ -50,6 +54,8 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" />
+
 
 </head>
 
@@ -161,11 +167,11 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Akaun Saya
                 </a>
-                <a class="dropdown-item" href="changePassword.php?id=<?= $_SESSION['patient_id']; ?>">
+                <a class="dropdown-item" href="patient_change_password.php?id=<?= $_SESSION['patient_id']; ?>">
                   <i class="fas fa-cog fa-sm fa-fw mr-2 text-gray-400"></i>
                   Tukar kata laluan
                 </a>
-                <a class="dropdown-item" href="">
+                <a class="dropdown-item" href="faq.php">
                   <i class="fas fa-sm fa-fw fa-question-circle mr-2 text-gray-400"></i>
                   FAQ
                 </a>
@@ -214,7 +220,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
               <div class="col-xl-6 col-lg-7">
                 <div class="card shadow mb-4">
                   <!-- Card Header - Dropdown -->
-                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <div class="card-header py-3 text-center">
                     <h6 class="m-0 font-weight-bold text-primary">Kadar Oksigen SPO2</h6>
                   </div>
                   <!-- Card Body -->
@@ -242,7 +248,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
               <div class="col-xl-6 col-lg-7">
                 <div class="card shadow mb-4">
                   <!-- Card Header - Dropdown -->
-                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <div class="card-header py-3 text-center">
                     <h6 class="m-0 font-weight-bold text-primary">Kadar Suhu Badan °C</h6>
                   </div>
                   <!-- Card Body -->
@@ -269,7 +275,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
               <div class="col mb-2">
                 <!-- Project Card Example -->
                 <div class="card shadow mb-4">
-                  <div class="card-header py-3">
+                  <div class="card-header py-3 text-center">
                     <h6 class="m-0 font-weight-bold text-primary"> Paparan Deklarasi Harian Kendiri</h6>
                   </div>
                   <div class="card-body">
@@ -322,37 +328,80 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
 
             </div>
 
-            <!-- Content Row for PIE CHARTS -->
+            <!-- Content Row for COVID CASE -->
             <div class="row">
-              <!-- Pie Chart 1 -->
+              <!-- ANGKA KES COVID-19 -->
               <div class="col-xl-6 col-lg-7">
-                <!-- <div class="card shadow mb-4"> -->
-                <!-- Card Header - Dropdown -->
-                <!-- <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Jumlah Kes Covid-19 di Malaysia</h6>
-                  </div> -->
-                <!-- Card Body -->
-                <!-- <div class="card-body">
-
-                  </div> -->
-                <!-- </div> -->
+                <div class="card shadow mb-4">
+                  <!-- Card Header - Dropdown -->
+                  <div class="card-header py-3 text-center">
+                    <h6 class="m-0 font-weight-bold text-primary">ANGKA HARIAN KES COVID-19</h6>
+                  </div>
+                  <!-- Card Body -->
+                  <div class="card-body">
+                    <div class="alert alert-warning text-center" role="alert">
+                      <b>KES BAHARU <i class="fas fa-fw fa-virus"></i></b> <br />
+                      <div style="font-size: 50px;">
+                        <?= number_format($global_cases['Countries'][105]['NewConfirmed']) ?>
+                      </div>
+                      <b>JUMLAH KES KESELURUHAN <i class="fas fa-fw fa-viruses"></i></b> <br />
+                      <div style="font-size: 50px;">
+                        <?= number_format($global_cases['Countries'][105]['TotalConfirmed']) ?>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <!-- Pie Chart 2 -->
+              <!-- ANGKA KEMATIAN -->
               <div class="col-xl-6 col-lg-7">
-                <!-- <div class="card shadow mb-4"> -->
-                <!-- Card Header - Dropdown -->
-                <!-- <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Jumlah Vaksinasi Harian di Malaysia</h6>
-                  </div> -->
-                <!-- Card Body -->
-                <!-- <div class="card-body">
-
-                  </div> -->
-                <!-- </div> -->
+                <div class="card shadow mb-4">
+                  <!-- Card Header - Dropdown -->
+                  <div class="card-header py-3 text-center">
+                    <h6 class="m-0 font-weight-bold text-primary">JUMLAH KEMATIAN DI MALAYSIA</h6>
+                  </div>
+                  <!-- Card Body -->
+                  <div class="card-body">
+                    <div class="alert alert-danger text-center" role="alert">
+                      <b>KEMATIAN BAHARU <i class="fas fa-fw fa-sad-tear"></i></b> <br />
+                      <div style="font-size: 50px;">
+                        <?= number_format($global_cases['Countries'][105]['NewDeaths']) ?>
+                      </div>
+                      <b>JUMLAH KEMATIAN <i class="fas fa-fw fa-heart-broken"></i></b> <br />
+                      <div style="font-size: 50px;">
+                        <?= number_format($global_cases['Countries'][105]['TotalDeaths']) ?>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
+            <!-- Content Row for Youtube Video -->
+            <div class="row">
+
+              <!-- VIDEO -->
+              <div class="col-xl-6 col-lg-7">
+                <div class="card shadow mb-4">
+                  <div class="card-body">
+                    <div class="embed-responsive embed-responsive-16by9 text-center">
+                      <iframe width="560" height="315" src="https://www.youtube.com/embed/BQuqNixmvuo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- VIDEO -->
+              <div class="col-xl-6 col-lg-7">
+                <div class="card shadow mb-4">
+                  <div class="card-body">
+                    <div class="embed-responsive embed-responsive-16by9 text-center">
+                      <iframe width="560" height="315" src="https://www.youtube.com/embed/n7kD9eMx5SU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <!-- /.container-fluid -->
         </form>

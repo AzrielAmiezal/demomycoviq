@@ -106,8 +106,8 @@ $date = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$id'")[0];
                   <div class="card-body text-center">
                     <div class=" alert alert-info">
                       <h6 class="card-title"><?= strtoupper($_SESSION['patientName']); ?></h6>
-                      <h6 class="card-title">No. Kad Pengenalan Malaysia</h6>
-                      <h6 class="card-title"><b><?= $_SESSION['patient_icNo']; ?></b></h6>
+                      <!-- <h6 class="card-title">No. Kad Pengenalan Malaysia</h6>
+                      <h6 class="card-title"><b><?= $_SESSION['patient_icNo']; ?></b></h6> -->
                       <h6 class="card-title"><b> SESI <?= $sesi; ?></b> </h6>
                       <h6 class="card-title" style="color: red;">* Required</h6>
                     </div>

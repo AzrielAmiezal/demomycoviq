@@ -33,7 +33,9 @@ $patientList = query("SELECT * FROM patient");
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <!-- Custom styles for this template-->
   <link href="../css/sb-admin-2.min.css" rel="stylesheet">
-
+  <!-- CSS Data table -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
 </head>
 
 <body id="page-top">
@@ -74,7 +76,7 @@ $patientList = query("SELECT * FROM patient");
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="admin_register.php">
           <i class="fas fa-fw fa-user-cog"></i>
           <span>Daftar Admin</span></a>
       </li>
@@ -99,7 +101,7 @@ $patientList = query("SELECT * FROM patient");
           </button>
 
           <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-            <h4>Utama</h4>
+            <h4>UTAMA</h4>
           </div>
 
           <!-- Topbar Navbar -->
@@ -118,7 +120,7 @@ $patientList = query("SELECT * FROM patient");
 
                 ?>
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= strtoupper($rows['admin_name']);  ?></span>
-                <img class="img-profile rounded-circle" src="../img/<?= $rows['admin_profileImg'] ?>">
+                <img class="img-profile rounded-circle" src="../admin/img/<?= $rows['admin_profileImg'] ?>">
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -129,14 +131,6 @@ $patientList = query("SELECT * FROM patient");
                 <a class="dropdown-item" href="admin_changePassword.php?id=<?= $_SESSION['admin_id']; ?>">
                   <i class="fas fa-cog fa-sm fa-fw mr-2 text-gray-400"></i>
                   Tukar kata laluan
-                </a>
-                <a class="dropdown-item" href="">
-                  <i class="fas fa-sm fa-fw fa-question-circle mr-2 text-gray-400"></i>
-                  FAQ
-                </a>
-                <a class="dropdown-item" href="">
-                  <i class="fas fa-info fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Privacy Policy
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -176,8 +170,8 @@ $patientList = query("SELECT * FROM patient");
                     <h6 class="m-0 font-weight-bold text-primary">SENARAI PESAKIT YANG MENDAFTAR</h6>
                   </div>
                   <div class="card-body">
-                    <div class="table-responsive col-lg-12">
-                      <table class="table table-striped">
+                    <div class="table-responsive col-lg-12 pt-1">
+                      <table id="myTable" class="table table-striped table-bordered" style="width:100%">
                         <thead class="table-dark" align="center">
                           <tr>
                             <th scope="col">BIL.</th>
@@ -195,7 +189,7 @@ $patientList = query("SELECT * FROM patient");
                             </td>
                           </tr>
                         <?php endif; ?>
-                        <tbody align="center">
+                        <tbody>
                           <?php
                           $i = 1;
                           foreach ($patientList as $p) : ?>
@@ -203,14 +197,15 @@ $patientList = query("SELECT * FROM patient");
                             <tr>
                               <td><?= $i++; ?></td>
                               <td><?= $p['patientName']; ?></td>
-                              <td><?= $p['patient_icNo']; ?></td>
-                              <td>+60 <?= $p['patient_telNo']; ?></td>
+                              <td align="center"><?= $p['patient_icNo']; ?></td>
+                              <td align="center">+60<?= $p['patient_telNo']; ?></td>
                               <td><?= $p['patientEmail']; ?></td>
-                              <td>
-                                <a href="patient_quarantine.php?patient=<?= $p['patient_id']; ?>" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Set Status & Tempoh Kuarantin"><i class="fas fa-calendar-plus"></i></a> |
-                                <a href="edit_patient_quarantine.php?patient=<?= $p['patient_id']; ?>" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini Status & Tempoh Kuarantin"><i class="fas fa-edit"></i></a> |
-                                <a href="view_patient.php?patient=<?= $p['patient_id']; ?>" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Maklumat Pesakit"><i class="fas fa-address-card"></i></a> |
-                                <a href="admin_chat.php?id=<?= $p['patient_id']; ?>&enter=true" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Chat Pesakit"><i class="fas fa-comment"></i></a>
+                              <td align="center">
+                                <a class="btn btn-primary btn-sm" href="patient_quarantine.php?patient=<?= $p['patient_id']; ?>" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Set Status & Tempoh Kuarantin"><i class="fas fa-calendar-plus"></i></a> |
+                                <a class="btn btn-warning btn-sm" href="edit_patient_quarantine.php?patient=<?= $p['patient_id']; ?>" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini Tempoh Kuarantin"><i class="fas fa-edit"></i></a> |
+                                <a class="btn btn-success btn-sm" href="edit_patient_status.php?patient=<?= $p['patient_id']; ?>" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Kemaskini Status Kuarantin"><i class="fas fa-house-user"></i></a> |
+                                <a class="btn btn-info btn-sm" href="view_patient.php?patient=<?= $p['patient_id']; ?>" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Maklumat Pesakit"><i class="fas fa-address-card"></i></a> |
+                                <a class="btn btn-secondary btn-sm" href="admin_chat.php?id=<?= $p['patient_id']; ?>&enter=true" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Chat Pesakit"><i class="fas fa-comment"></i></a>
                               </td>
                             </tr>
 
@@ -312,6 +307,25 @@ $patientList = query("SELECT * FROM patient");
 
   <!-- Custom scripts for all pages-->
   <script src="../js/sb-admin-2.min.js"></script>
+  <!-- Data table js -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      $('#myTable').DataTable({
+        "ordering": false,
+        "info": false,
+        search: {
+          return: false
+        },
+        language: {
+          searchPlaceholder: "Search patient"
+        }
+      });
+    });
+  </script>
 
 </body>
 

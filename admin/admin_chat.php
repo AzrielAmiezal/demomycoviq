@@ -8,7 +8,7 @@ if (isset($_GET['logout'])) {
   $logout_message = "<div class='msgln'><span class='left-info'>User <b class='user-name-left'>(Admin) " . $_SESSION['admin_name'] . "</b> has left the chat session.</span><br /></div>";
   file_put_contents("../chat/log" . $_GET["id"] . ".html", $logout_message, FILE_APPEND | LOCK_EX);
 
-  header("Location: index.php"); //Redirect the user
+  header("Location: admin_index.php"); //Redirect the user
 }
 
 if (isset($_GET['enter'])) {

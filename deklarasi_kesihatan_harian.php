@@ -34,6 +34,7 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" />
 
 </head>
 
@@ -194,11 +195,11 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Akaun Saya
                 </a>
-                <a class="dropdown-item" href="changePassword.php?id=<?= $_SESSION['patient_id']; ?>">
+                <a class="dropdown-item" href="patient_change_password.php?id=<?= $_SESSION['patient_id']; ?>">
                   <i class="fas fa-cog fa-sm fa-fw mr-2 text-gray-400"></i>
                   Tukar kata laluan
                 </a>
-                <a class="dropdown-item" href="">
+                <a class="dropdown-item" href="faq.php">
                   <i class="fas fa-sm fa-fw fa-question-circle mr-2 text-gray-400"></i>
                   FAQ
                 </a>
@@ -217,7 +218,7 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
         </nav>
         <!-- End of Topbar -->
 
-        <form method="POST" action="">
+        <form method="GET" action="printPDF.php" target="_blank">
           <!-- Begin Page Content -->
           <div class="container-fluid">
             <!-- Page Heading -->
@@ -265,12 +266,12 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                           ?>
                             <?php
                             for ($i = $startDate; $i <= $endDate; $i->modify('+1 day')) :
-                              $date = new DateTime();
+                              $date = new DateTime('2022-03-18');
                               $time1 = $i->format('Y-m-d');
                               $time2 = $date->format('Y-m-d');
                               $hour = date('G');
                               $minute = date('i');
-                              // $hour = 10;
+                              // $hour = 13;
                               // $minute = 00;
                             ?>
                               <tr>
@@ -296,6 +297,9 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                                     if (mysqli_num_rows($result1) < 1 && ($time2 > $time1)) {
                                       echo '<i class="fas fa-times-circle" style="color:red;"></i>';
                                       //echo 'Sesi 2';
+                                      // $patientName = $patient['patientName'];
+                                      // $patientEmail = $patient['patientEmail'];
+                                      // sendMailforgotHealthStatus1($patientName, $patientEmail);
                                     } else {
                                       if (mysqli_num_rows($result1) < 1) {
                                         echo '<i class="fas fa-times-circle" style="color:orange;"></i>';
@@ -342,6 +346,7 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                                   } else if (($time1 != $time2) && ($hour >= 00 && $minute >= 00) && ($hour <= 12 && $minute <= 59)) {
                                     if (mysqli_num_rows($result2) < 1 && ($time2 > $time1)) {
                                       echo '<i class="fas fa-times-circle" style="color:red;"></i>';
+
                                       //echo 'Sesi 2';
                                     } else {
                                       if (mysqli_num_rows($result2) < 1) {
@@ -401,7 +406,7 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                       if ($a > 0) {
                         if ($time2 > $d['tarikh_tamat'] && $d['status_kuarantin'] == 'Tamat Kuarantin') {
 
-                          echo '<button>Print PDF</button>';
+                          echo '<a class="btn btn-primary btn-sm" href="printPDF.php?id=' . $_SESSION['patient_id'] . '">Cetak PDF</a>';
                         }
                       }
                       ?>

@@ -1,9 +1,6 @@
 <?php
 session_start();
 require '../functions.php';
-// require '../PHPMailer/PHPMailer.php';
-// require '../PHPMailer/Exception.php';
-// require '../PHPMailer/SMTP.php';
 
 
 $id = $_GET['patient'];
@@ -14,14 +11,14 @@ if (isset($_POST['submit'])) {
   //check whether data has been added or not
   if (editIsolation($_POST) > 0) {
     echo "<script>
-            alert('Maklumat berjaya dikemaskini. Email notifikasi telah dihantar kepada pesakit');
-            document.location.href = 'view_patient.php?patient=$id';
+            alert('Maklumat berjaya dikemaskini. Sila Kemaskini status kuarantin bagi pesakit');
+            document.location.href = 'edit_patient_status.php?patient=$id';
           </script>";
   } else {
     echo "<script>
             alert('Failed to submit! Maybe occur some error');
-              document.location.href = 'view_patient.php?patient=" . $id .
-      "</script>";
+           document.location.href = 'edit_patient_quarantine.php?patient=$id';
+          </script>";
   }
 }
 
@@ -30,7 +27,7 @@ $conn = connection();
 $patient = query("SELECT patient.*,deklarasi_harian.* FROM patient
                                 JOIN deklarasi_harian
                                 ON deklarasi_harian.patient_id = patient.patient_id
-                                WHERE patient.patient_id = '$id'")[0];
+                                WHERE patient.patient_id = '$id'");
 //$rows = mysqli_fetch_assoc($result);
 
 ?>
@@ -179,67 +176,58 @@ $patient = query("SELECT patient.*,deklarasi_harian.* FROM patient
                   <div class="card-body">
                     <div class="form-group">
                       <form method="POST" action="">
-                        <input type="hidden" name="patient_id" id="patient_id" value="<?= $patient['patient_id']; ?>">
-                        <!-- For email -->
-                        <input type="hidden" name="patientName" id="patientName" value="<?= $patient['patientName']; ?>">
-                        <input type="hidden" name="patient_icNo" id="patient_icNo" value="<?= $patient['patient_icNo']; ?>">
-                        <input type="hidden" name="patientEmail" id="patientEmail" value="<?= $patient['patientEmail']; ?>">
-                        <div class="table-responsive">
-                          <table class="table">
-                            <tr>
-                              <th scope="col">NAMA PESAKIT</th>
-                              <td><?= $patient['patientName']; ?></td>
-                            </tr>
-                            <tr>
-                              <th scope="col">NO K/P</th>
-                              <td><?= $patient['patient_icNo']; ?></td>
-                            </tr>
-                            <tr>
-                              <th scope="col">TAHAP JANGKITAN COVID-19</th>
-                              <td>
-                                <select class="custom-select custom-select-sm" name="covidStage" id="covidStage" required>
-                                  <option value="">Sila Pilih</option>
-                                  <option value="1 - Tidak menunjukkan sebarang gejala" <?php if ($patient['covidStage'] == '1 - Tidak menunjukkan sebarang gejala') {
-                                                                                          echo 'selected';
-                                                                                        } ?>>1 - Tidak menunjukkan sebarang gejala</option>
-                                  <option value="2 - Bergejala ringan, tiada radang paru-paru" <?php if ($patient['covidStage'] == '2 - Bergejala ringan, tiada radang paru-paru') {
-                                                                                                  echo 'selected';
-                                                                                                } ?>>2 - Bergejala ringan, tiada radang paru-paru</option>
-                                  <!-- <option value="3 - Bergejala, mengalami radang paru-paru">3 - Bergejala, mengalami radang paru-paru</option> -->
-                                </select>
-                              </td>
-                            </tr>
-                            <tr>
-                              <th scope="col">TARIKH PESAKIT MULA KUARANTIN</th>
-                              <td>
-                                <input class="form-control form-control-sm" type="date" name="tarikh_mula" id="tarikh_mula" value="<?= $patient['tarikh_mula']; ?>" required>
-                              </td>
-                            </tr>
-                            <tr>
-                              <th scope="col">TARIKH PESAKIT TAMAT KUARANTIN</th>
-                              <td>
-                                <input class="form-control form-control-sm" type="date" name="tarikh_tamat" id="tarikh_tamat" value="<?= $patient['tarikh_tamat']; ?>" required>
-                              </td>
-                            </tr>
-                            <tr>
-                              <th scope="col">STATUS</th>
-                              <td>
-                                <select class="custom-select custom-select-sm" name="status_kuarantin" id="status_kuarantin" required>
-                                  <option value="">Sila Pilih</option>
-                                  <option value="Sedang dalam pemantauan" <?php if ($patient['status_kuarantin'] == 'Sedang dalam pemantauan') {
-                                                                            echo 'selected';
-                                                                          } ?>>Sedang dalam pemantauan</option>
-                                  <option value="Tamat Kuarantin" <?php if ($patient['status_kuarantin'] == 'Tamat Kuarantin') {
-                                                                    echo 'selected';
-                                                                  } ?>>Tamat Kuarantin</option>
-                                </select>
-                              </td>
-                            </tr>
-                          </table>
-                          <div class="text-center">
-                            <button class="btn btn-light" type="submit" name="submit" onclick="return confirm('Adakah anda pasti tentang maklumat yang dimasukkan?')"><b>Simpan</b></button>
+                        <?php if (empty($patient)) : ?>
+                          <p style="color: red; font-style:italic; text-align:center;">Tiada Maklumat</p>
+                        <?php endif; ?>
+                        <?php foreach ($patient as $pt) : ?>
+                          <input type="hidden" name="patient_id" id="patient_id" value="<?= $pt['patient_id']; ?>">
+                          <!-- For email -->
+                          <input type="hidden" name="patientName" id="patientName" value="<?= $pt['patientName']; ?>">
+                          <input type="hidden" name="patient_icNo" id="patient_icNo" value="<?= $pt['patient_icNo']; ?>">
+                          <input type="hidden" name="patientEmail" id="patientEmail" value="<?= $pt['patientEmail']; ?>">
+                          <div class="table-responsive">
+                            <table class="table">
+                              <tr>
+                                <th scope="col">NAMA PESAKIT</th>
+                                <td><?= $pt['patientName']; ?></td>
+                              </tr>
+                              <tr>
+                                <th scope="col">NO K/P</th>
+                                <td><?= $pt['patient_icNo']; ?></td>
+                              </tr>
+                              <tr>
+                                <th scope="col">TAHAP JANGKITAN COVID-19</th>
+                                <td>
+                                  <select class="custom-select custom-select-sm" name="covidStage" id="covidStage" required>
+                                    <option value="">Sila Pilih</option>
+                                    <option value="1 - Tidak menunjukkan sebarang gejala" <?php if ($pt['covidStage'] == '1 - Tidak menunjukkan sebarang gejala') {
+                                                                                            echo 'selected';
+                                                                                          } ?>>1 - Tidak menunjukkan sebarang gejala</option>
+                                    <option value="2 - Bergejala ringan, tiada radang paru-paru" <?php if ($pt['covidStage'] == '2 - Bergejala ringan, tiada radang paru-paru') {
+                                                                                                    echo 'selected';
+                                                                                                  } ?>>2 - Bergejala ringan, tiada radang paru-paru</option>
+                                    <!-- <option value="3 - Bergejala, mengalami radang paru-paru">3 - Bergejala, mengalami radang paru-paru</option> -->
+                                  </select>
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="col">TARIKH PESAKIT MULA KUARANTIN</th>
+                                <td>
+                                  <input class="form-control form-control-sm" type="date" name="tarikh_mula" id="tarikh_mula" value="<?= $pt['tarikh_mula']; ?>" required>
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="col">TARIKH PESAKIT TAMAT KUARANTIN</th>
+                                <td>
+                                  <input class="form-control form-control-sm" type="date" name="tarikh_tamat" id="tarikh_tamat" value="<?= $pt['tarikh_tamat']; ?>" required>
+                                </td>
+                              </tr>
+                            </table>
+                            <div class="text-center">
+                              <button class="btn btn-light" type="submit" name="submit" onclick="return confirm('Adakah anda pasti tentang maklumat yang dimasukkan?')"><b>Simpan</b></button>
+                            </div>
                           </div>
-                        </div>
+                        <?php endforeach; ?>
                       </form>
                     </div>
                   </div>

@@ -1,12 +1,15 @@
 <?php
 session_start();
 require 'functions.php';
+require 'PHPMailer/PHPMailer.php';
+require 'PHPMailer/Exception.php';
+require 'PHPMailer/SMTP.php';
 
-// if (!isset($_SESSION['login'])) {
+if (!isset($_SESSION['login'])) {
 
-//   header("Location: index.php");
-//   exit;
-// }
+  header("Location: index.php");
+  exit;
+}
 
 //get id from url
 $id = $_GET['id'];
@@ -56,6 +59,7 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" />
 
 </head>
 
@@ -63,7 +67,7 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
 
   <div class="container">
 
-    <div class="card o-hidden border-0 shadow-lg my-5 col-lg-7 mx-auto">
+    <div class="card o-hidden border-0 shadow-lg my-5 col-lg-5 mx-auto">
       <div class="card-body p-0">
         <!-- Nested Row within Card Body -->
         <div class="row">
@@ -74,6 +78,7 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
                 <h1 class="h4 text-gray-900 mb-4"><b>Akaun Saya</b></h1>
               </div>
               <form class="user" action="" method="POST">
+                <input type="hidden" class="form-control form-control-user" name="patientEmail" id="patientEmail" autocomplete="off" value="<?= $pt['patientEmail']; ?>">
                 <div class="form-group">
                   <input type="text" class="form-control form-control-user" name="patientName" id="patientName" autocomplete="off" placeholder="Nama Penuh" required style="text-transform:uppercase" value="<?= $pt['patientName']; ?>">
                 </div>
@@ -86,17 +91,17 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
                 <div class="form-group">
                   <input type="text" class="form-control form-control-user" name="patient_telNo" id="patient_telNo" autocomplete="off" placeholder="No Telefon" required style="text-transform:uppercase" value="<?= $pt['patient_telNo']; ?>">
                 </div>
-                <div class="form-group">
-                  <input type="text" class="form-control form-control-user" name="patientEmail" id="patientEmail" autocomplete="off" placeholder="EMAIL" value="<?= $pt['patientEmail']; ?>" disabled>
-                </div>
+                <!-- <div class="form-group">
+                  <input type="text" class="form-control form-control-user" name="patientEmail" id="patientEmail" autocomplete="off" value="<?= $pt['patientEmail']; ?>" disabled>
+                </div> -->
 
                 <input type="hidden" name="patient_profileImg" id="patient_profileImg" value="default.jpg" readonly>
 
                 <div class="form-group">
                   <div class="g-recaptcha" data-sitekey="6Ldl_HYeAAAAAEUuybZkVB5pWBO2NURKUJo6fqeN"></div>
-
+                  <span style="color: red;">Sila klik pada captcha.</span>
                 </div>
-                <button type="submit" class="btn btn-primary btn-user btn-block" name="register">Simpan</button>
+                <button type="submit" class="btn btn-primary btn-user btn-block" name="register" onclick="return confirm('Adakah anda pasti tentang maklumat yang dimasukkan?')">Simpan</button>
               </form>
             </div>
           </div>

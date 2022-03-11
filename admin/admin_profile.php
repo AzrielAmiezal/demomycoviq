@@ -8,24 +8,24 @@ if (!isset($_SESSION['admin_login'])) {
   exit;
 }
 
-$admin = query("SELECT * FROM `admin` WHERE admin_id = " . $_SESSION['admin_id'])[0];
+$id = $_SESSION['admin_id'];
+$admin = query("SELECT * FROM `admin` WHERE admin_id = '$id'")[0];
 
 if (isset($_POST['update'])) {
 
-  if (editProfile($_POST) > 0) {
+  if (editAdminProfile($_POST) > 0) {
     echo "<script>
                 alert('Akaun anda berjaya dikemaskini');
-                document.location.href = 'patient_profile.php';
+                document.location.href = 'admin_profile.php?id=$id';
             </script>";
   } else {
     echo "<script>
                 alert('Something went wrong. Please try again later.');
-                document.location.href = 'patient_profile.php';
+                document.location.href = 'admin_profile.php?id=$id';
             </script>";
   }
 }
 
-//echo $_SESSION['patient_icNo'];
 
 ?>
 
@@ -47,6 +47,7 @@ if (isset($_POST['update'])) {
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <!-- Custom styles for this template-->
   <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" />
 
 </head>
 
@@ -88,7 +89,7 @@ if (isset($_POST['update'])) {
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="admin_register.php">
           <i class="fas fa-fw fa-user-cog"></i>
           <span>Daftar Admin</span></a>
       </li>
@@ -137,7 +138,7 @@ if (isset($_POST['update'])) {
                     </div>
                     <div class="image-upload text-center">
                       <div class="container">
-                        <img class="img-thumbnail img-profile rounded-circle border border-info" src="../img/<?= $admin['admin_profileImg']; ?>" style="width: 12rem; height: 12rem;" draggable="false"> <br /><br />
+                        <img class="img-thumbnail img-profile rounded-circle border border-info" src="../admin/img/<?= $admin['admin_profileImg']; ?>" style="width: 12rem; height: 12rem;" draggable="false"> <br /><br />
                       </div>
 
                       <b><?= strtoupper($admin['admin_name']); ?></b> <br />
@@ -187,15 +188,35 @@ if (isset($_POST['update'])) {
           </button>
         </div>
         <form action="" method="POST" enctype="multipart/form-data">
-          <input type="hidden" name="patient_id" value="<?= $admin['admin_id']; ?>">
+          <input type="hidden" name="admin_id" value="<?= $admin['admin_id']; ?>">
           <div class="modal-body">
             <div class="form-group style">
-
-
-
-
-
-
+              <div class="image-upload text-center">
+                <div class="container">
+                  <label for="file-input">
+                    <input type="hidden" name="old_adminprofileImg" value="<?= $admin['admin_profileImg']; ?>">
+                    <img class="img-thumbnail img-profile rounded-circle border border-info" src="img/<?= $admin['admin_profileImg']; ?>" style="width: 8rem; height: 8rem;" width=100 id="output" draggable="false">
+                  </label>
+                  <p>Click Image to change profile picture</p>
+                  <input type="file" class="form-control form-control-sm" name="admin_profileImg" id="file-input" onchange="loadFile(event)" style="display: none;">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nama Penuh</label>
+                <input type="text" class="form-control form-control-sm" name="admin_name" id="admin_name" value="<?= strtoupper($admin['admin_name']); ?>" autocomplete="off" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nama Pengguna (Username)</label>
+                <input type="text" class="form-control form-control-sm" name="admin_username" id="admin_username" value="<?= strtoupper($admin['admin_username']); ?>" autocomplete="off" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control form-control-sm" name="admin_email" id="admin_email" value="<?= $admin['admin_email']; ?>" autocomplete="off" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">No Telefon</label>
+                <input type="text" class="form-control form-control-sm" name="admin_telNo" id="admin_telNo" value="+60 <?= $admin['admin_telNo']; ?>" autocomplete="off" required>
+              </div>
             </div>
             <div class="modal-footer">
               <button class="btn btn-sm btn-secondary" type="button" data-dismiss="modal">Batal</button>
@@ -206,7 +227,6 @@ if (isset($_POST['update'])) {
       </div>
     </div>
   </div>
-  <!-- end of edit modal -->
 
   <!-- Bootstrap core JavaScript-->
   <script src="../vendor/jquery/jquery.min.js"></script>
@@ -217,6 +237,7 @@ if (isset($_POST['update'])) {
 
   <!-- Custom scripts for all pages-->
   <script src="../js/sb-admin-2.min.js"></script>
+  <!-- change profile image script -->
   <script>
     var loadFile = function(event) {
       var output = document.getElementById('output');

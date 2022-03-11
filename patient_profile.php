@@ -8,19 +8,20 @@ if (!isset($_SESSION['login'])) {
   exit;
 }
 
-$patient = query("SELECT * FROM patient WHERE patient_id = " . $_SESSION['login_id'])[0];
+$id = $_SESSION['login_id'];
+$patient = query("SELECT * FROM patient WHERE patient_id = '$id'")[0];
 
 if (isset($_POST['update'])) {
 
   if (editProfile($_POST) > 0) {
     echo "<script>
                 alert('Akaun anda berjaya dikemaskini');
-                document.location.href = 'patient_profile.php';
+                document.location.href = 'patient_profile.php?id=$id';
             </script>";
   } else {
     echo "<script>
                 alert('Something went wrong. Please try again later.');
-                document.location.href = 'patient_profile.php';
+                document.location.href = 'patient_profile.php?id=$id';
             </script>";
   }
 }
@@ -47,6 +48,7 @@ if (isset($_POST['update'])) {
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" />
 
 </head>
 
@@ -295,6 +297,7 @@ if (isset($_POST['update'])) {
 
   <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>
+  <!-- change profile image script -->
   <script>
     var loadFile = function(event) {
       var output = document.getElementById('output');

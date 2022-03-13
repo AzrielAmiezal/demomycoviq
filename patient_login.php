@@ -72,6 +72,7 @@ if (isset($_GET['code'])) :
             $_SESSION['patient_address'] = $row['patient_address'];
             $_SESSION['patient_telNo'] = $row['patient_telNo'];
             $_SESSION['patientEmail'] = $row['patientEmail'];
+            //$_SESSION['patient_details_edit'] = false;
             //for graph
             $_SESSION['patient_id'] = $row['patient_id'];
             $_SESSION['google_id'] = $row['google_id'];
@@ -80,7 +81,7 @@ if (isset($_GET['code'])) :
         } else {
 
             // if user not exists we will insert the user
-            $insert = mysqli_query($conn, "INSERT INTO `patient`(`google_id`,`patientName`,`patient_icNo`,`patient_address`,`patient_telNo`,`patientEmail`,`patientPassword`,`verification_code`,`is_verified`,`patient_profileImg`) VALUES('$id','$patientName','','','0','$patientEmail','',0,1,'$patient_profileImg')");
+            $insert = mysqli_query($conn, "INSERT INTO `patient`(`google_id`,`patientName`,`patient_icNo`,`patient_address`,`patient_telNo`,`patientEmail`,`patientPassword`,`verification_code`,`is_verified`,`patient_profileImg`) VALUES('$id','$patientName','','','','$patientEmail','',0,1,'$patient_profileImg')");
 
             if ($insert) {
                 $_SESSION['login'] = true;
@@ -116,7 +117,7 @@ else :
         <meta name="theme-color" content="#FFFFFF">
         <link rel="icon" type="image/x-icon" href="logo.png">
         <link rel="manifest" href="manifest.json">
-        <link rel="apple-touch-icon" href="logo192.png">
+        <link rel="apple-touch-icon" href="logo512.png">
         <title>MYCOVIQ | COVID-19 INDIVIDUAL QUARANTINE</title>
 
         <!-- Custom fonts for this template-->
@@ -154,7 +155,9 @@ else :
                                                 <p class="alert alert-danger" role="alert" style="text-align: center; font-size: small;"><?= $login['message']; ?></p>
                                             <?php endif; ?>
                                             <div class=" form-group">
-                                                <input type="text" class="form-control form-control-user" name="patientEmail" id="patientEmail" autocomplete="off" placeholder="Masukkan Email atau NO IC" required>
+                                                <input type="text" class="form-control form-control-user" name="patientEmail" id="patientEmail" autocomplete="off" placeholder="Masukkan Email atau NO IC" value="<?php if (isset($_POST['login'])) {
+                                                                                                                                                                                                                        echo htmlentities($_POST['patientEmail']);
+                                                                                                                                                                                                                    } ?>" required>
                                             </div>
                                             <div class="form-group">
                                                 <input type="password" class="form-control form-control-user" name="patientPassword" id="myInput" placeholder="Masukkan Kata Laluan" required>
@@ -201,7 +204,12 @@ else :
         <script src="js/sb-admin-2.min.js"></script>
 
         <!-- PWA Service Worker -->
-        <script src="js/pwa/index.js"></script>
+        <!-- <script src="js/pwa/index.js"></script> -->
+        <script>
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js');
+            }
+        </script>
 
         <script>
             function myFunction() {
@@ -216,8 +224,12 @@ else :
 
     </body>
 
-    <footer align="center"=>
-        <small>&copy; Copyright 2021 - <?= date('Y'); ?>, All right reserved.</small>
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Copyright &copy; MyCOVIQ <?= date('Y'); ?>. All right reserved.</span>
+            </div>
+        </div>
     </footer>
 
     </html>

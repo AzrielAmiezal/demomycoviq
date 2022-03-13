@@ -6,14 +6,24 @@ session_start();
 //check whether the user is login or not
 if (!isset($_SESSION['login'])) {
   header("Location: patient_login.php");
-  exit;
+}
+
+if (isset($_SESSION['login'])) {
+  $conn = connection();
+  $query = "SELECT patient_icNo FROM patient WHERE patient_id = '" . $_SESSION['login_id'] . "'";
+  $result = mysqli_query($conn, $query);
+  $row = mysqli_fetch_assoc($result);
+  //echo "num row: " . mysqli_num_rows($result);
+
+  if (empty($row["patient_icNo"])) {
+    header("Location: patient_details.php?id=" . $_SESSION['login_id']);
+  }
 }
 
 // API COVID-19 CASE
 $global = file_get_contents("https://api.covid19api.com/summary");
 $global_cases = json_decode($global, true);
 
-$conn = connection();
 $id = $_SESSION['login_id'];
 $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperature.*,sesi_kemaskini_kesihatan.*,deklarasi_harian.* 
                         FROM health_status 
@@ -175,9 +185,9 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
                   <i class="fas fa-sm fa-fw fa-question-circle mr-2 text-gray-400"></i>
                   FAQ
                 </a>
-                <a class="dropdown-item" href="">
+                <a class="dropdown-item" href="about.php">
                   <i class="fas fa-info fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Privacy Policy
+                  About us
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -412,7 +422,7 @@ $health_status = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperatur
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright &copy;2021 - <?= date('Y'); ?>, All right reserved.</span>
+            <span>Copyright &copy; MyCOVIQ <?= date('Y'); ?>. All right reserved.</span>
           </div>
         </div>
       </footer>

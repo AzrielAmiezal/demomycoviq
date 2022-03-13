@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 if (isset($_GET['logout'])) {
@@ -22,45 +21,182 @@ if (isset($_GET['enter'])) {
 }
 
 
+//echo $_SESSION['patient_icNo'];
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
   <link rel="icon" type="image/x-icon" href="logo.png">
   <title>MYCOVIQ | COVID-19 INDIVIDUAL QUARANTINE</title>
-  <meta name="description" content="" />
-  <link rel="stylesheet" href="style.css" />
+
+
+  <!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="chat.css" />
+
 </head>
 
-<body>
+<body id="page-top">
   <?php
   if (!isset($_SESSION['patientName'])) {
   } else {
   ?>
+    <!-- Page Wrapper -->
     <div id="wrapper">
-      <div id="menu">
-        <p class="welcome">Welcome, <b><?php echo $_SESSION['patientName']; ?></b></p>
-        <p class="logout"><a id="exit" href="#">Exit Chat</a></p>
-      </div>
 
-      <div id="chatbox">
-        <?php
-        if (file_exists("chat/log" . $_GET["id"] . ".html") && filesize("chat/log" . $_GET["id"] . ".html") > 0) {
-          $contents = file_get_contents("chat/log" . $_GET["id"] . ".html");
-          echo $contents;
-        }
-        ?>
-      </div>
 
-      <form name="message" action="">
-        <input name="usermsg" type="text" id="usermsg" />
-        <input name="submitmsg" type="submit" id="submitmsg" value="Send" />
-      </form>
+      <!-- Sidebar -->
+      <ul class="navbar-nav sidebar sidebar-dark accordion toggled" id="accordionSidebar" style="background-color: #73B00B;">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
+          <!-- <div class="sidebar-brand-icon rotate-n-15"> -->
+          <!-- <i class="fas fa-laugh-wink"></i> -->
+          MYCOVIQ
+          <!-- </div> -->
+          <div class="sidebar-brand-text mx-3">MYCOVIQ</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+          <a class="nav-link" href="index.php">
+            <i class="fas fa-fw fa-home"></i>
+            <span>Utama</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+          Menu
+        </div>
+
+        <!-- Nav Item - Deklarasi Kendiri-->
+        <li class="nav-item">
+          <a class="nav-link" href="deklarasi_kesihatan_harian.php?id=<?= $_SESSION['patient_id']; ?>">
+            <i class="fas fa-fw fa-file-medical"></i>
+            <span>Deklarasi Kendiri</span></a>
+        </li>
+
+        <!-- Nav Item - Chat-->
+        <li class="nav-item">
+          <a class="nav-link" href="patient_chat.php?id=<?= $_SESSION['patient_id']; ?>&enter=true">
+            <i class="fas fa-fw fa-comments"></i>
+            <span>Chat kami</span></a>
+        </li>
+
+        <!-- Nav Item - Profile -->
+        <!-- <li class="nav-item">
+        <a class="nav-link" href="patient_profile.php?id=<?= $_SESSION['patient_id']; ?>">
+          <i class="fas fa-fw fa-user"></i>
+          <span>Akaun Saya</span></a>
+      </li> -->
+
+        <!-- Nav Item - FAQ -->
+        <!-- <li class="nav-item">
+        <a class="nav-link" href="patient_faq.php">
+          <i class="fas fa-fw fa-question-circle"></i>
+          <span>FAQ</span></a>
+      </li> -->
+      </ul>
+      <!-- End of Sidebar -->
+
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+
+
+          <!-- Begin Page Content -->
+          <div class="container-fluid">
+
+            <div class="row justify-content-center">
+              <div class="col-xl-5 col-lg-7 mt-5">
+                <h3 class="card-title">CHAT KAMI</h3>
+                <div class="card text-dark bg-light shadow mb-4">
+                  <!-- Card Body -->
+                  <div class="card-body">
+                    <!-- Card Body -->
+                    <div id="menu">
+                      <p class="welcome">HI, <b><?php echo $_SESSION['patientName']; ?></b></p>
+                      <p class="logout"><a id="exit" href="#">Exit Chat</a></p>
+                    </div>
+
+                    <div id="chatbox">
+                      <?php
+                      if (file_exists("chat/log" . $_GET["id"] . ".html") && filesize("chat/log" . $_GET["id"] . ".html") > 0) {
+                        $contents = file_get_contents("chat/log" . $_GET["id"] . ".html");
+                        echo $contents;
+                      }
+                      ?>
+                    </div>
+
+                    <form name="message" action="">
+                      <input name="usermsg" type="text" id="usermsg" />
+                      <input name="submitmsg" type="submit" id="submitmsg" value="Send" />
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span>Copyright &copy; MyCOVIQ <?= date('Y'); ?>. All right reserved.</span>
+            </div>
+          </div>
+        </footer>
+        <!-- End of Footer -->
+
+      </div>
+      <!-- End of Content Wrapper -->
+
     </div>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
     <script type="text/javascript">
       // jQuery Document
       $(document).ready(function() {
@@ -104,6 +240,7 @@ if (isset($_GET['enter'])) {
         });
       });
     </script>
+
 </body>
 
 </html>

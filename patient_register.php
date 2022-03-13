@@ -11,17 +11,18 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
     $responseData = json_decode($verifyResponse);
 
     if ($responseData->success) {
-        if (patientRegister($_POST) > 0) {
+        $register = patientRegister($_POST);
+        if ($register["error"] != true) {
             echo "<script>
                 alert('Link verifikasi telah dihantar ke email anda. Sila semak email dan klik VERIFY NOW untuk meneruskan proses pendaftaran akaun MYCOVIQ. Terima Kasih');
                 document.location.href = 'patient_login.php';
             </script>";
-        } else {
-            echo "<script>
+        }
+    } else {
+        echo "<script>
                 alert('Something went wrong. Please try again later.');
                 document.location.href = 'patient_register.php';
             </script>";
-        }
     }
 }
 
@@ -66,33 +67,50 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
                                 <h1 class="h4 text-gray-900 mb-4"><b>Daftar Akaun</b></h1>
                             </div>
                             <form class="user" action="" method="POST" id="captcha_form">
+                                <?php if (isset($register['error'])) : ?>
+                                    <p class="alert alert-danger" role="alert" style="text-align: center; font-size: small;"><?= $register['message']; ?></p>
+                                <?php endif; ?>
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-user" name="patientName" id="patientName" autocomplete="off" placeholder="Nama Penuh" required style="text-transform:uppercase">
+                                    <input type="text" class="form-control form-control-user" name="patientName" id="patientName" autocomplete="off" placeholder="Nama Penuh" value="<?php if (isset($_POST['register'])) {
+                                                                                                                                                                                            echo htmlentities($_POST['patientName']);
+                                                                                                                                                                                        } ?>" required style="text-transform:uppercase">
 
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-user" name="patient_icNo" id="patient_icNo" autocomplete="off" placeholder="No K/P (tanpa '-' / space)" required style="text-transform:uppercase">
+                                    <input type="text" class="form-control form-control-user" name="patient_icNo" id="patient_icNo" autocomplete="off" placeholder="No K/P (tanpa '-' / space)" value="<?php if (isset($_POST['register'])) {
+                                                                                                                                                                                                            echo htmlentities($_POST['patient_icNo']);
+                                                                                                                                                                                                        } ?>" required style="text-transform:uppercase">
 
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-user" name="patient_address" id="patient_address" autocomplete="off" placeholder="Alamat Tetap" required style="text-transform:uppercase">
+                                    <input type="text" class="form-control form-control-user" name="patient_address" id="patient_address" autocomplete="off" placeholder="Alamat Tetap" value="<?php if (isset($_POST['register'])) {
+                                                                                                                                                                                                    echo htmlentities($_POST['patient_address']);
+                                                                                                                                                                                                } ?>" required style="text-transform:uppercase">
 
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-user" name="patient_telNo" id="patient_telNo" autocomplete="off" placeholder="No Telefon" required style="text-transform:uppercase">
+                                    <input type="text" class="form-control form-control-user" name="patient_telNo" id="patient_telNo" autocomplete="off" placeholder="No Telefon" value="<?php if (isset($_POST['register'])) {
+                                                                                                                                                                                                echo htmlentities($_POST['patient_telNo']);
+                                                                                                                                                                                            } ?>" required style="text-transform:uppercase">
 
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-user" name="patientEmail" id="patientEmail" autocomplete="off" placeholder="EMAIL" required>
+                                    <input type="text" class="form-control form-control-user" name="patientEmail" id="patientEmail" autocomplete="off" placeholder="EMAIL" value="<?php if (isset($_POST['register'])) {
+                                                                                                                                                                                        echo htmlentities($_POST['patientEmail']);
+                                                                                                                                                                                    } ?>" required>
 
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" class="form-control form-control-user" name="patientPassword1" autocomplete="off" placeholder="KATA LALUAN" required>
+                                        <input type="password" class="form-control form-control-user" name="patientPassword1" autocomplete="off" placeholder="KATA LALUAN" value="<?php if (isset($_POST['register'])) {
+                                                                                                                                                                                        echo htmlentities($_POST['patientPassword1']);
+                                                                                                                                                                                    } ?>" required>
 
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="password" class="form-control form-control-user" name="patientPassword2" autocomplete="off" placeholder="SAHKAN KATA LALUAN" required>
+                                        <input type="password" class="form-control form-control-user" name="patientPassword2" autocomplete="off" placeholder="SAHKAN KATA LALUAN" value="<?php if (isset($_POST['register'])) {
+                                                                                                                                                                                                echo htmlentities($_POST['patientPassword2']);
+                                                                                                                                                                                            } ?>" required>
 
                                     </div>
                                 </div>
@@ -127,8 +145,12 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
 
-<footer align="center">
-    <small>&copy; Copyright 2021 - <?= date('Y'); ?>, All right reserved.</small>
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; MyCOVIQ <?= date('Y'); ?>. All right reserved.</span>
+        </div>
+    </div>
 </footer>
 
 </html>

@@ -24,17 +24,20 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
   $responseData = json_decode($verifyResponse);
 
   if ($responseData->success) {
-    if (editDetails($_POST) > 0) {
+    //checking error handling
+    $check = editDetails($_POST);
+    if ($check["error"] != true) {
+      //$_SESSION["patient_details_edit"] = true;
       echo "<script>
                 alert('Akaun anda berjaya dikemaskini');
                 document.location.href = 'index.php';
             </script>";
-    } else {
-      echo "<script>
-                alert('Something went wrong. Please try again later.');
-                document.location.href = 'patient_login.php';
-            </script>";
     }
+  } else {
+    echo "<script>
+                alert('Something went wrong. Please try again later.');
+                document.location.href = 'patient_details.php?id='" . $_SESSION['login_id'] . "';
+            </script>";
   }
 }
 ?>
@@ -78,18 +81,27 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
                 <h1 class="h4 text-gray-900 mb-4"><b>Akaun Saya</b></h1>
               </div>
               <form class="user" action="" method="POST">
+                <?php if (isset($check['error'])) : ?>
+                  <p class="alert alert-danger" role="alert" style="text-align: center; font-size: small;"><?= $check['message']; ?></p>
+                <?php endif; ?>
                 <input type="hidden" class="form-control form-control-user" name="patientEmail" id="patientEmail" autocomplete="off" value="<?= $pt['patientEmail']; ?>">
                 <div class="form-group">
                   <input type="text" class="form-control form-control-user" name="patientName" id="patientName" autocomplete="off" placeholder="Nama Penuh" required style="text-transform:uppercase" value="<?= $pt['patientName']; ?>">
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control form-control-user" name="patient_icNo" id="patient_icNo" autocomplete="off" placeholder="No IC (tanpa '-' / space)" required style="text-transform:uppercase" value="<?= $pt['patient_icNo']; ?>">
+                  <input type="text" class="form-control form-control-user" name="patient_icNo" id="patient_icNo" autocomplete="off" placeholder="No KP (tanpa '-' / space)" value="<?php if (isset($_POST['register'])) {
+                                                                                                                                                                                      echo htmlentities($_POST['patient_icNo']);
+                                                                                                                                                                                    } ?>" required style="text-transform:uppercase">
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control form-control-user" name="patient_address" id="patient_address" autocomplete="off" placeholder="Alamat" required style="text-transform:uppercase" value="<?= $pt['patient_address']; ?>">
+                  <input type="text" class="form-control form-control-user" name="patient_address" id="patient_address" autocomplete="off" placeholder="Alamat" value="<?php if (isset($_POST['register'])) {
+                                                                                                                                                                          echo htmlentities($_POST['patient_address']);
+                                                                                                                                                                        } ?>" required style="text-transform:uppercase">
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control form-control-user" name="patient_telNo" id="patient_telNo" autocomplete="off" placeholder="No Telefon" required style="text-transform:uppercase" value="<?= $pt['patient_telNo']; ?>">
+                  <input type="text" class="form-control form-control-user" name="patient_telNo" id="patient_telNo" autocomplete="off" placeholder="No Telefon" value="<?php if (isset($_POST['register'])) {
+                                                                                                                                                                          echo htmlentities($_POST['patient_telNo']);
+                                                                                                                                                                        } ?>" required style="text-transform:uppercase">
                 </div>
                 <!-- <div class="form-group">
                   <input type="text" class="form-control form-control-user" name="patientEmail" id="patientEmail" autocomplete="off" value="<?= $pt['patientEmail']; ?>" disabled>
@@ -125,8 +137,12 @@ if (isset($_POST['register']) && $_POST['g-recaptcha-response'] != "") {
 
 </body>
 
-<footer align="center">
-  <small>&copy; Copyright 2021 - <?= date('Y'); ?>, All right reserved.</small>
+<footer class="sticky-footer bg-white">
+  <div class="container my-auto">
+    <div class="copyright text-center my-auto">
+      <span>Copyright &copy; MyCOVIQ <?= date('Y'); ?>. All right reserved.</span>
+    </div>
+  </div>
 </footer>
 
 </html>

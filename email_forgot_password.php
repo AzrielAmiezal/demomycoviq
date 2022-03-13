@@ -4,20 +4,36 @@ require 'PHPMailer/PHPMailer.php';
 require 'PHPMailer/Exception.php';
 require 'PHPMailer/SMTP.php';
 
+
+
 if (isset($_POST['submit'])) {
 
-  if (forgotPassword($_POST) > 0) {
-    echo "<script>
-                alert('Link verifikasi telah dihantar ke email anda. Sila semak email dan klik pada link untuk menukar kata laluan baru.');
+  $conn = connection();
+  $patient = mysqli_query($conn, "SELECT * FROM patient WHERE patientEmail ='" . $_POST['patientEmail'] . "'");
+  if (mysqli_num_rows($patient) > 0) {
+    if (forgotPassword($_POST) > 0) {
+      echo "<script>
+                alert('Link kata laluan telah dihantar ke email anda. Sila semak email dan klik pada link untuk menukar kata laluan baru.');
                 document.location.href = 'patient_login.php';
             </script>";
-  } else {
-    echo "<script>
+    } else {
+      echo "<script>
                 alert('Something went wrong. Please try again later.');
                 document.location.href = 'patient_login.php';
             </script>";
+    }
+  } else {
+    // echo "<script>
+    //             alert('Email tidak berdaftar. Sila Cuba lagi!');
+    //             document.location.href = 'email_forgot_password.php';
+    //         </script>";
+
+    $error = true;
+    $message = 'Email tidak wujud!';
   }
 }
+
+
 
 ?>
 
@@ -32,8 +48,6 @@ if (isset($_POST['submit'])) {
   <meta name="description" content="">
   <meta name="theme-color" content="#FFFFFF">
   <link rel="icon" type="image/x-icon" href="logo.png">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="logo192.png">
   <title>MYCOVIQ | COVID-19 INDIVIDUAL QUARANTINE</title>
 
   <!-- Custom fonts for this template-->
@@ -66,9 +80,14 @@ if (isset($_POST['submit'])) {
                     <h1 class="h4 text-gray-900 mb-4"><b>MYCOVIQ</b></h1>
                   </div>
                   <form class="user" action="" method="POST">
+                    <?php if (isset($error)) : ?>
+                      <p class="alert alert-danger" role="alert" style="text-align: center; font-size: small;"><?= $message; ?></p>
+                    <?php endif; ?>
                     <!-- <form class="user"> -->
                     <div class=" form-group">
-                      <input type="email" class="form-control form-control-user" name="patientEmail" id="patientEmail" autocomplete="off" placeholder="Sila masukkan email anda" required>
+                      <input type="email" class="form-control form-control-user" name="patientEmail" id="patientEmail" autocomplete="off" placeholder="Sila masukkan email anda" value="<?php if (isset($_POST['submit'])) {
+                                                                                                                                                                                          echo htmlentities($_POST['patientEmail']);
+                                                                                                                                                                                        } ?>" required>
                     </div>
                     <button type="submit" class="btn btn-primary btn-user btn-block" name="submit">Hantar</button>
                   </form>
@@ -96,8 +115,12 @@ if (isset($_POST['submit'])) {
 
 </body>
 
-<footer align="center"=>
-  <small>&copy; Copyright 2021 - <?= date('Y'); ?>, All right reserved.</small>
+<footer class="sticky-footer bg-white">
+  <div class="container my-auto">
+    <div class="copyright text-center my-auto">
+      <span>Copyright &copy; MyCOVIQ <?= date('Y'); ?>. All right reserved.</span>
+    </div>
+  </div>
 </footer>
 
 </html>

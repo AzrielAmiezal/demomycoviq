@@ -44,6 +44,7 @@ $patientData = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperature.
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <!-- Custom styles for this template-->
   <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" />
 
 </head>
 
@@ -141,14 +142,6 @@ $patientData = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperature.
                 <a class="dropdown-item" href="admin_changePassword.php?id=<?= $_SESSION['admin_id']; ?>">
                   <i class="fas fa-cog fa-sm fa-fw mr-2 text-gray-400"></i>
                   Tukar kata laluan
-                </a>
-                <a class="dropdown-item" href="">
-                  <i class="fas fa-sm fa-fw fa-question-circle mr-2 text-gray-400"></i>
-                  FAQ
-                </a>
-                <a class="dropdown-item" href="">
-                  <i class="fas fa-info fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Privacy Policy
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -411,7 +404,7 @@ $patientData = mysqli_query($conn, "SELECT health_status.*, spo2.*, temperature.
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright &copy;2021 - <?= date('Y'); ?>, All right reserved.</span>
+            <span>Copyright &copy; MyCOVIQ <?= date('Y'); ?>. All right reserved.</span>
           </div>
         </div>
       </footer>

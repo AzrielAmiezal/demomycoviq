@@ -203,9 +203,9 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                   <i class="fas fa-sm fa-fw fa-question-circle mr-2 text-gray-400"></i>
                   FAQ
                 </a>
-                <a class="dropdown-item" href="">
+                <a class="dropdown-item" href="about.php">
                   <i class="fas fa-info fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Privacy Policy
+                  About us
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -266,13 +266,13 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                           ?>
                             <?php
                             for ($i = $startDate; $i <= $endDate; $i->modify('+1 day')) :
-                              $date = new DateTime('2022-03-18');
+                              $date = new DateTime();
                               $time1 = $i->format('Y-m-d');
                               $time2 = $date->format('Y-m-d');
                               $hour = date('G');
                               $minute = date('i');
-                              // $hour = 13;
-                              // $minute = 00;
+                              // $hour = 15;
+                              // $minute = 30;
                             ?>
                               <tr>
                                 <td><?= $a++; ?></td>
@@ -285,15 +285,16 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                                   $row1 = mysqli_fetch_assoc($result1);
                                   //echo "num row: " . mysqli_num_rows($result1);
 
-                                  if (($time1 == $time2) && ($hour >= 00 && $minute >= 00) && ($hour <= 12 && $minute <= 59)) {
+                                  if (($time1 == $time2) && ($hour >= 00 && $minute >= 00) && ($hour <= 13 && $minute <= 59)) {
                                     if (mysqli_num_rows($result1) < 1) {
 
                                       echo '<a href="borang_health_status.php?hari=' . $daySesi1 . '&sesi=1"><i class="fas fa-pen-square"></i></a>';
                                       //echo 'Sesi 2';
+
                                     } else {
                                       echo '<i class="fas fa-check-circle" style="color:green;"></i>';
                                     }
-                                  } else if (($time1 != $time2) && ($hour >= 00 && $minute >= 00) && ($hour <= 12 && $minute <= 59)) {
+                                  } else if (($time1 != $time2) && ($hour >= 00 && $minute >= 00) && ($hour <= 13 && $minute <= 59)) {
                                     if (mysqli_num_rows($result1) < 1 && ($time2 > $time1)) {
                                       echo '<i class="fas fa-times-circle" style="color:red;"></i>';
                                       //echo 'Sesi 2';
@@ -309,13 +310,13 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                                     }
                                   }
 
-                                  if (($time1 == $time2) && ($hour >= 13 && $minute >= 00) && ($hour <= 23 && $minute <= 59)) {
+                                  if (($time1 == $time2) && ($hour >= 14 && $minute >= 00) && ($hour <= 23 && $minute <= 59)) {
                                     if (mysqli_num_rows($result1) < 1) {
                                       echo '<i class="fas fa-times-circle" style="color:red;"></i>';
                                     } else {
                                       echo '<i class="fas fa-check-circle" style="color:green;"></i>';
                                     }
-                                  } else if (($time1 != $time2) && ($hour >= 13 && $minute >= 00) && ($hour <= 23 && $minute <= 59)) {
+                                  } else if (($time1 != $time2) && ($hour >= 14 && $minute >= 00) && ($hour <= 23 && $minute <= 59)) {
                                     if (mysqli_num_rows($result1) < 1 && ($time2 > $time1)) {
                                       echo '<i class="fas fa-times-circle" style="color:red;"></i>';
                                       //echo 'Sesi 2';
@@ -337,6 +338,26 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                                   $result2 = mysqli_query($conn, "SELECT * FROM health_status,sesi_kemaskini_kesihatan WHERE health_status.patient_id = sesi_kemaskini_kesihatan.patient_id AND health_status.sesi_id = sesi_kemaskini_kesihatan.sesi_id AND sesi_No = 2 AND tarikh_kemaskini = '$time1'");
                                   $row2 = mysqli_fetch_assoc($result2);
 
+                                  if (($time1 == $time2) && ($hour >= 13 && $minute >= 00) && ($hour <= 23 && $minute <= 59)) {
+                                    if (mysqli_num_rows($result2) < 1) {
+                                      echo '<a href="borang_health_status.php?hari=' . $daySesi2 . '&sesi=2"><i class="fas fa-pen-square"></i></a>';
+                                      //echo 'Sesi 2';
+                                    } else {
+                                      echo '<i class="fas fa-check-circle" style="color:green;"></i>';
+                                    }
+                                  } else if (($time1 != $time2) && ($hour >= 13 && $minute >= 00) && ($hour <= 23 && $minute <= 59)) {
+                                    if (mysqli_num_rows($result2) < 1 && ($time2 > $time1)) {
+                                      echo '<i class="fas fa-times-circle" style="color:red;"></i>';
+                                      //echo 'Sesi 2';
+                                    } else {
+                                      if (mysqli_num_rows($result2) < 1) {
+                                        echo '<i class="fas fa-times-circle" style="color:orange;"></i>';
+                                      } else {
+                                        echo '<i class="fas fa-check-circle" style="color:green;"></i>';
+                                      }
+                                    }
+                                  }
+
                                   if (($time1 == $time2) && ($hour >= 00 && $minute >= 00) && ($hour <= 12 && $minute <= 59)) {
                                     if (mysqli_num_rows($result2) < 1) {
                                       echo '<i class="fas fa-times-circle" style="color:orange;"></i>';
@@ -357,25 +378,6 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                                     }
                                   }
 
-                                  if (($time1 == $time2) && ($hour >= 13 && $minute >= 00) && ($hour <= 23 && $minute <= 59)) {
-                                    if (mysqli_num_rows($result2) < 1) {
-                                      echo '<a href="borang_health_status.php?hari=' . $daySesi2 . '&sesi=2"><i class="fas fa-pen-square"></i></a>';
-                                      //echo 'Sesi 2';
-                                    } else {
-                                      echo '<i class="fas fa-check-circle" style="color:green;"></i>';
-                                    }
-                                  } else if (($time1 != $time2) && ($hour >= 13 && $minute >= 00) && ($hour <= 23 && $minute <= 59)) {
-                                    if (mysqli_num_rows($result2) < 1 && ($time2 > $time1)) {
-                                      echo '<i class="fas fa-times-circle" style="color:red;"></i>';
-                                      //echo 'Sesi 2';
-                                    } else {
-                                      if (mysqli_num_rows($result2) < 1) {
-                                        echo '<i class="fas fa-times-circle" style="color:orange;"></i>';
-                                      } else {
-                                        echo '<i class="fas fa-check-circle" style="color:green;"></i>';
-                                      }
-                                    }
-                                  }
                                   ?>
                                 </td>
                               </tr>
@@ -393,7 +395,7 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
 
                         <?php if ($a > 0) : ?>
                           <div class="alert alert-warning" style="text-align: center;">
-                            <p style="color: red;">Sila kemaskini kesihatan harian anda dua kali sehari, sekali di sebelah pagi dan sekali di sebelah petang, masing-masing sebelum <b>1.00 PM</b> dan <b>12 tengah malam</b> </p>
+                            <p style="color: red;">Sila kemaskini kesihatan harian anda dua kali sehari, bagi sesi 1 bermula dari 12:00 tengah malam sehingga 1:00 petang (1 jam masa tambahan sehingga pukul 2:00 petang), manakala sesi 2 bermula dari pukul 1:00 petang hingga 12:00 tengah malam.</p>
                             <p style="color: red;">Anda akan menjalani tempoh kuarantin selama <b><?= $a - 1; ?> hari</b> bermula pada <b><?= date('d M Y', strtotime($d['tarikh_mula'])); ?></b> dijangka tamat pada <b><?= date('d M Y', strtotime($d['tarikh_tamat'])); ?></b></p>
                             <p style="color: red;">Tahap Jangkitan: <?= $d['covidStage']; ?> <br /> Status: <?= $d['status_kuarantin']; ?></p>
                             <p><i class="fas fa-pen-square" style="color:blue;"></i> : Pautan Dibuka | <i class="fas fa-times-circle" style="color:red;"></i> : Tidak dikemaskini | <i class="fas fa-times-circle" style="color:orange;"></i> : Pautan belum dibuka | <i class="fas fa-check-circle" style="color:green;"></i> : Berjaya dikemaskini</p>
@@ -405,8 +407,9 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
                       <?php
                       if ($a > 0) {
                         if ($time2 > $d['tarikh_tamat'] && $d['status_kuarantin'] == 'Tamat Kuarantin') {
-
-                          echo '<a class="btn btn-primary btn-sm" href="printPDF.php?id=' . $_SESSION['patient_id'] . '">Cetak PDF</a>';
+                          echo '<div class="text-center mb-3">';
+                          echo '<a class="btn btn-primary btn-sm" href="printPDF.php?id=' . $_SESSION['patient_id'] . '">Cetak Slip</a>';
+                          echo '</div>';
                         }
                       }
                       ?>
@@ -425,7 +428,7 @@ $days = query("SELECT * FROM deklarasi_harian WHERE patient_id = '$patient_ID' "
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright &copy;2021 - <?= date('Y'); ?>, All right reserved.</span>
+            <span>Copyright &copy; MyCOVIQ <?= date('Y'); ?>. All right reserved.</span>
           </div>
         </div>
       </footer>

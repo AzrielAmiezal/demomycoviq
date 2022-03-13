@@ -117,7 +117,7 @@ $id = $_SESSION['login_id'];
           </button>
 
           <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-            <h4>FAQ</h4>
+            <h4>ABOUT US</h4>
           </div>
 
           <!-- Topbar Navbar -->
@@ -152,9 +152,9 @@ $id = $_SESSION['login_id'];
                   <i class="fas fa-sm fa-fw fa-question-circle mr-2 text-gray-400"></i>
                   FAQ
                 </a>
-                <a class="dropdown-item" href="about.php">
+                <a class="dropdown-item" href="">
                   <i class="fas fa-info fa-sm fa-fw mr-2 text-gray-400"></i>
-                  About us
+                  Privacy Policy
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -180,67 +180,14 @@ $id = $_SESSION['login_id'];
                 <!-- Project Card Example -->
                 <div class="card shadow mb-4">
                   <div class="card-header py-3 text-center">
-                    <h6 class="m-0 font-weight-bold text-primary">FREQUENTLY ASKED QUESTION</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">ABOUT US</h6>
                   </div>
                   <div class="card-body">
-
-                    <div class="accordion" id="accordionExample">
-                      <div class="card">
-                        <div class="card-header" id="headingOne">
-                          <h2 class="mb-0">
-                            <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                              <b>1. BILAKAH SAYA BOLEH MENGEMASKINI DEKLARASI HARIAN KENDIRI?</b>
-                            </button>
-                          </h2>
-                        </div>
-                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                          <div class="card-body">
-                            Sebaik sahaja anda mendaftar di MYCOVIQ anda akan menerima email dari pihak MYCOVIQ untuk mengemaskini deklarasi harian kendiri dalam masa 24 JAM.
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="card-header" id="headingTwo">
-                          <h2 class="mb-0">
-                            <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                              <b>2. BAGAIMANA SAYA INGIN MELIHAT PAPARAN KESIHATAN SEPANJANG TEMPOH KUARANTIN?</b>
-                            </button>
-                          </h2>
-                        </div>
-                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                          <div class="card-body">
-                            Anda boleh melihat paparan kesihatan kendiri di bahagian utama aplikasi.
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="card-header" id="headingThree">
-                          <h2 class="mb-0">
-                            <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                              <b>3. BAGAIMANA SAYA INGIN MENGISI DEKLARASI HARIAN KENDIRI?</b>
-                            </button>
-                          </h2>
-                        </div>
-                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                          <div class="card-body">
-                            Anda boleh mengisi deklarasi harian kendiri sebaik sahaja anda menerima email dari pihak MYCOVIQ. Deklarasi Harian Kendiri perlu diisi mengikut hari,tarikh,masa dan sesi yang telah ditetapkan.
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="card-header" id="headingFour">
-                          <h2 class="mb-0">
-                            <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                              <b>4. APAKAH WAKTU YANG SESUAI UNTUK SAYA MENGEMASKINI DEKLARASI HARIAN KENDIRI?</b>
-                            </button>
-                          </h2>
-                        </div>
-                        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
-                          <div class="card-body">
-                            Deklarasi harian terbahagi kepada dua sesi. Sesi 1 perlu diisi bermula dari 12:00 tengah malam sehingga 1:00 petang (1 jam masa tambahan sehingga pukul 2:00 petang), manakala sesi 2 bermula dari pukul 1:00 petang hingga 12:00 tengah malam.
-                          </div>
-                        </div>
-                      </div>
+                    <div class="alert alert-secondary text-center" role="alert">
+                      <img class="img-thumbnail img-profile border border-secondary" src="logo.png" alt="logo.png" style="width: 8rem; height: 8rem;" draggable="false">
+                      <p style="font-size: 50px;"><b>MYCOVIQ</b></p>
+                      <b>version 1.0</b> <br />
+                      <b>mycoviqwebapp@gmail.com</b>
                     </div>
 
                   </div>

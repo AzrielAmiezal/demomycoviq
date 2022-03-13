@@ -119,8 +119,12 @@
 
  </body>
 
- <footer align="center">
-   <small>&copy; Copyright 2021 - <?= date('Y'); ?>, All right reserved.</small>
+ <footer class="sticky-footer bg-white">
+   <div class="container my-auto">
+     <div class="copyright text-center my-auto">
+       <span>Copyright &copy; MyCOVIQ <?= date('Y'); ?>. All right reserved.</span>
+     </div>
+   </div>
  </footer>
 
  </html>

@@ -113,43 +113,6 @@ function addHealthStatusReport($data)
   return mysqli_affected_rows($conn);
 }
 
-//Email notification for remind the patient end of quarantine
-function sendMailforgotHealthStatus1($patientEmail, $patientName)
-{
-  //Create an instance; passing `true` enables exceptions
-  $mail = new PHPMailer(true);
-  try {
-    //Server settings
-    $mail->isSMTP();                                            //Send using SMTP
-    $mail->Host       = 'smtp.gmail.com';                       //Set the SMTP server to send through
-    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-    $mail->Username   = 'aazwary0@gmail.com';                   //SMTP username
-    $mail->Password   = '991006amiezalazwary';                  //SMTP password
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-    $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
-    //Recipients
-    $mail->setFrom('aazwary0@gmail.com', 'MyCOVIQ');
-    $mail->addAddress($patientEmail);          //Add admin email
-
-    //Content
-    $mail->isHTML(true);                                        //Set email format to HTML
-    $mail->Subject = 'MYCOVIQ: PERINGATAN KEMASKINI DEKLARASI HARIAN';
-    $mail->Body    = "Hi $patientName, <br/><br/>
-    <b>SILA KEMASKINI DEKLARASI HARIAN KENDIRI ANDA MENGIKUT HARI,TARIKH, MASA DAN SESI YANG TELAH DITETAPKAN.</b> <br/><br/>
-    
-    <b>PASTIKAN ANDA TERUS KEKAL PATUHI SOP, AMALKAN 3W DAN ELAKKAN 3C.</b><br/><br/>
-
-    Terima Kasih.
-    ";
-
-    $mail->send();
-    return true;
-  } catch (Exception $e) {
-    return false;
-  }
-}
-
 function patientLogin($data)
 {
 
@@ -178,10 +141,14 @@ function patientLogin($data)
     if (password_verify($patientPassword, $row['patientPassword'])) {
 
       if ($row['is_verified'] == 0) {
-        echo "<script>
-                alert('Email belum disahkan. Sila semak link verifikasi akaun di email anda.');
-                document.location.href = 'patient_login.php';
-            </script>";
+        // echo "<script>
+        //         alert('Email belum disahkan. Sila semak link verifikasi akaun di email anda.');
+        //         document.location.href = 'patient_login.php';
+        //     </script>";
+        return [
+          'error' => true,
+          'message' => 'Sila semak link verifikasi di akaun email anda dan klik Verify Now.'
+        ];
       } else {
         //set session
         $_SESSION['login'] = true;
@@ -198,7 +165,7 @@ function patientLogin($data)
   }
   return [
     'error' => true,
-    'message' => 'Emel / Kata laluan salah!'
+    'message' => 'Email / Kata laluan salah!'
   ];
 }
 
@@ -224,13 +191,14 @@ function sendMailRegister($patientEmail, $v_code)
     //Content
     $mail->isHTML(true);                                        //Set email format to HTML
     $mail->Subject = 'VERIFIKASI PENDAFTARAN AKAUN MYCOVIQ';
-    $mail->Body    = "Terima Kasih kerana mendaftar!
-    Sila klik link di bawah untuk mengesahkan email anda.
-    <a href='http://localhost/email_verify.php?email=$patientEmail&code=$v_code'>Verify Now</a>";
-
     // $mail->Body    = "Terima Kasih kerana mendaftar!
     // Sila klik link di bawah untuk mengesahkan email anda.
-    // <a href='http:///email_verify.php?email=$patientEmail&code=$v_code'>Verify Now</a>";
+    // <a href='http://localhost/email_verify.php?email=$patientEmail&code=$v_code'>Verify Now</a>";
+
+    $mail->Body    = "Terima Kasih kerana mendaftar!
+    Sila klik link di bawah untuk mengesahkan email anda.
+    <a href='http://demomycoviq.ddns.net/email_verify.php?email=$patientEmail&code=$v_code'>Verify Now</a>";
+
 
     $mail->send();
     return true;
@@ -295,86 +263,111 @@ function patientRegister($data)
   $patientPassword1 = mysqli_real_escape_string($conn, $data['patientPassword1']);
   $patientPassword2 = mysqli_real_escape_string($conn, $data['patientPassword2']);
 
-  //upload pictures
-  // $patientImage = uploadPicture();
-  // if (!$patientImage) {
-  //   return false;
-  // }
+  $message = null;
 
   //if username or password is empty
   if (empty($patientName) || empty($patientICNo) || empty($patientAddress) || empty($patientTelNo) || empty($patientEmail) || empty($patientPassword1) || empty($patientPassword2)) {
 
-    echo "<script>
-                alert('Sila isi semua maklumat yang diperlukan!');
-                document.location.href = 'patient_register.php';
-            </script>";
+    // echo "<script>
+    //             alert('Sila isi semua maklumat yang diperlukan!');
+    //             document.location.href = 'patient_register.php';
+    //         </script>";
 
-    return false;
+    // return [
+    //   $message .= ,
+    //   'error' => true,
+    //   'message' => $message
+    // ];
+    return [
+      'error' => true,
+      'message' => 'Sila isi semua maklumat yang diperlukan!'
+    ];
   }
 
   if (!filter_var($patientEmail, FILTER_VALIDATE_EMAIL)) {
 
-    echo "<script>
-                alert('Sila masukkan email yang sah!');
-                document.location.href = 'patient_register.php';
-            </script>";
-
-    return false;
+    // echo "<script>
+    //             alert('Sila masukkan email yang sah!');
+    //             document.location.href = 'patient_register.php';
+    //         </script>";
+    return [
+      'error' => true,
+      'message' => 'Sila masukkan email yang sah!'
+    ];
   }
 
   //if email is already registered
-  if (query("SELECT * FROM patient WHERE patientEmail = '$patientEmail'")) {
+  if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM patient WHERE patientEmail = '$patientEmail'")) > 0) {
 
-    echo "<script>
-                alert('Email sudah didaftarkan. Sila log masuk.');
-                document.location.href = 'patient_register.php';
-            </script>";
+    // echo "<script>
+    //             alert('Email sudah didaftarkan. Sila log masuk.');
+    //             document.location.href = 'patient_register.php';
+    //         </script>";
 
-    return false;
+    return [
+      'error' => true,
+      'message' => 'Email sudah berdaftar. Sila log masuk!'
+    ];
   }
 
   //if IC No is already registered
-  if (query("SELECT * FROM patient WHERE patient_icNo = '$patientICNo'")) {
+  if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM patient WHERE patient_icNo = '$patientICNo'")) > 0) {
 
-    echo "<script>
-                alert('No IC / Passport sudah didaftarkan. Sila log masuk.');
-                document.location.href = 'patient_register.php';
-            </script>";
-
-    return false;
+    // echo "<script>
+    //             alert('No IC / Passport sudah didaftarkan. Sila log masuk.');
+    //             document.location.href = 'patient_register.php';
+    //         </script>";
+    return [
+      'error' => true,
+      'message' => 'No IC / Passport sudah didaftarkan. Sila log masuk!'
+    ];
   }
 
   //if Tel No is already registered
-  if (query("SELECT * FROM patient WHERE patient_telNo = '$patientTelNo'")) {
+  if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM patient WHERE patient_telNo = '$patientTelNo'")) > 0) {
 
-    echo "<script>
-                alert('No telefon sudah didaftarkan! Sila log masuk.');
-                document.location.href = 'patient_register.php';
-            </script>";
-
-    return false;
+    // echo "<script>
+    //             alert('No telefon sudah didaftarkan! Sila log masuk.');
+    //             document.location.href = 'patient_register.php';
+    //         </script>";
+    return [
+      'error' => true,
+      'message' => 'No telefon sudah didaftarkan! Sila log masuk!'
+    ];
   }
 
   //check password confirmation
   if ($patientPassword1 !== $patientPassword2) {
 
-    echo "<script>
-                alert('Kata laluan tidak sepadan. Sila masukkan kata laluan yang sah.');
-                document.location.href = 'patient_register.php';
-            </script>";
+    // echo "<script>
+    //             alert('Kata laluan tidak sepadan. Sila masukkan kata laluan yang sah.');
+    //             document.location.href = 'patient_register.php';
+    //         </script>";
 
-    return false;
+    return [
+      'error' => true,
+      'message' => 'Kata laluan tidak sepadan. Sila masukkan kata laluan yang sah!'
+    ];
+
+    // return [
+    //   $message .= 'Kata laluan tidak sepadan. Sila masukkan kata laluan yang sah! <br />',
+    //   'error' => true,
+    //   'message' => $message
+    // ];
   }
 
   //if password < 5 digit
   if (strlen($patientPassword1 < 5)) {
 
-    echo "<script>
-                alert('Kata laluan terlalu pendek. Maksimum 8-10 perkataan / simbol');
-                document.location.href = 'patient_register.php';
-            </script>";
+    // echo "<script>
+    //             alert('Kata laluan terlalu pendek. Maksimum 8-10 perkataan / simbol');
+    //             document.location.href = 'patient_register.php';
+    //         </script>";
 
-    return false;
+    return [
+      'error' => true,
+      'message' => 'Kata laluan terlalu pendek. Maksimum 8-10 perkataan / simbol'
+    ];
   }
 
   //if username and password is suitable
@@ -387,8 +380,8 @@ function patientRegister($data)
                 (null,0,'$patientName','$patientICNo','$patientAddress',$patientTelNo,'$patientEmail','$patient_new_password','$v_code',0,'default.jpg')";
   sendMailRegister($patientEmail, $v_code);
   sendMailNotifyAdmin($patientEmail, $patientName, $patientICNo, $patientTelNo);
-  mysqli_query($conn, $query) or die(mysqli_error($conn));
-  return mysqli_affected_rows($conn);
+  mysqli_query($conn, $query);
+  if (mysqli_affected_rows($conn) > 0) return ['error' => false, 'affected_row' => mysqli_affected_rows($conn)];
 }
 
 function uploadPicture()
@@ -498,6 +491,24 @@ function editDetails($data)
   $patientEmail = $data['patientEmail'];
   $patientProfileImg = htmlspecialchars($data['patient_profileImg']);
 
+  //if IC No is already registered
+  if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM patient WHERE patient_icNo = '$patientICNo'")) > 0) {
+
+    return [
+      'error' => true,
+      'message' => 'No KP / Passport sudah didaftarkan!'
+    ];
+  }
+
+  //if Tel No is already registered
+  if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM patient WHERE patient_telNo = '$patientTelNo'")) > 0) {
+
+    return [
+      'error' => true,
+      'message' => 'No telefon sudah didaftarkan!'
+    ];
+  }
+
   $query = "UPDATE patient SET
                 patientName = '$patientName',    
                 patient_icNo = '$patientICNo',
@@ -508,7 +519,8 @@ function editDetails($data)
 
   sendMailNotifyAdmin($patientEmail, $patientName, $patientICNo, $patientTelNo);
   mysqli_query($conn, $query) or die(mysqli_error($conn));
-  return mysqli_affected_rows($conn);
+  if (mysqli_affected_rows($conn) > 0) return ['error' => false, 'affected_row' => mysqli_affected_rows($conn)];
+  // return mysqli_affected_rows($conn);
 }
 
 function adminRegister($data)
@@ -981,9 +993,13 @@ function sendMailForgotPassword($patientEmail, $v_code)
     //Content
     $mail->isHTML(true);                                        //Set email format to HTML
     $mail->Subject = 'MYCOVIQ: RESET KATA LALUAN';
+    // $mail->Body    = "Hi,<br/>
+    // <b>Sila klik pada link di bawah untuk menukar kata laluan baharu.</b> <br/>
+    // <a href='http://localhost/forgotPassword.php?email=$patientEmail&code=$v_code'>Tukar Kata Laluan</a>";
+
     $mail->Body    = "Hi,<br/>
     <b>Sila klik pada link di bawah untuk menukar kata laluan baharu.</b> <br/>
-    <a href='http://localhost/forgotPassword.php?email=$patientEmail&code=$v_code'>Tukar Kata Laluan</a>";
+    <a href='http://demomycoviq.ddns.net/forgotPassword.php?email=$patientEmail&code=$v_code'>Tukar Kata Laluan</a>";
 
     $mail->send();
     return true;

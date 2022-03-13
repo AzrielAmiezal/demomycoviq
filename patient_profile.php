@@ -215,7 +215,7 @@ if (isset($_POST['update'])) {
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright &copy;2021 - <?= date('Y'); ?>, All right reserved.</span>
+            <span>Copyright &copy; MyCOVIQ <?= date('Y'); ?>. All right reserved.</span>
           </div>
         </div>
       </footer>
